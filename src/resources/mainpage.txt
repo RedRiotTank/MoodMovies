@@ -1,0 +1,13 @@
+/**
+    \mainpage Mood Movies Documentation.
+
+    This is Mood Movies documentation.
+    \section Sec1
+        texto
+    \section Creators
+
+    This software has been created by:
+        - AAA
+        - BBB
+
+*/
