@@ -76,11 +76,11 @@
 		<!-- Selector de moods-->
 		<p>¿Cuál es tu mood hoy?</p>
 		<div id="mood_selector">
-		 	<input  type="radio" id="contento_mood" name="mood_option">
+		 	<input  type="radio" id="contento_mood" name="mood_option" value="good" checked>
 		 	<label for="contento_mood">Contento</label>
-		 	<input  type="radio" id="normal_mood" name="mood_option">
+		 	<input  type="radio" id="normal_mood" name="mood_option" value="normal">
 		 	<label for="normal_mood">Normal</label>
-		 	<input  type="radio" id="mal_mood" name="mood_option">
+		 	<input  type="radio" id="mal_mood" name="mood_option" value="bad">
 		 	<label for="mal_mood">Mal</label>
 	 	</div>
 		
@@ -103,25 +103,25 @@
 		<fieldset id="yes_genres_fieldset" class="fieldset1">
 			<legend>Géneros que te gustan:  </legend> 
 			<label for="checkbox-1">Acción</label>
-			<input type="checkbox" name="checkbox-1" id="checkbox-1" class="genre_selector">
+			<input type="checkbox" name="action" id="checkbox-1" class="genre_selector" value="yes">
 			<label for="checkbox-2">Animación</label>
-			<input type="checkbox" name="checkbox-2" id="checkbox-2" class="genre_selector">
+			<input type="checkbox" name="animation" id="checkbox-2" class="genre_selector" value="yes">
 			<label for="checkbox-3">Aventura</label>
-			<input type="checkbox" name="checkbox-3" id="checkbox-3" class="genre_selector">
+			<input type="checkbox" name="adventures" id="checkbox-3" class="genre_selector" value="yes">
 			<label for="checkbox-4">Comedia</label>
-			<input type="checkbox" name="checkbox-4" id="checkbox-4" class="genre_selector">
+			<input type="checkbox" name="comedy" id="checkbox-4" class="genre_selector" value="yes">
 			<label for="checkbox-5">Drama</label>
-			<input type="checkbox" name="checkbox-5" id="checkbox-5" class="genre_selector">
+			<input type="checkbox" name="drama" id="checkbox-5" class="genre_selector" value="yes">
 			<label for="checkbox-6">Fantasía</label>
-			<input type="checkbox" name="checkbox-6" id="checkbox-6" class="genre_selector">
+			<input type="checkbox" name="fantasy" id="checkbox-6" class="genre_selector" value="yes">
 			<label for="checkbox-7">Terror</label>
-			<input type="checkbox" name="checkbox-7" id="checkbox-7" class="genre_selector">
+			<input type="checkbox" name="horror" id="checkbox-7" class="genre_selector" value="yes">
 			<label for="checkbox-8">Misterio</label>
-			<input type="checkbox" name="checkbox-8" id="checkbox-8" class="genre_selector">
+			<input type="checkbox" name="mistery" id="checkbox-8" class="genre_selector" value="yes">
 			<label for="checkbox-9">Thriller</label>
-			<input type="checkbox" name="checkbox-9" id="checkbox-9" class="genre_selector">
+			<input type="checkbox" name="thriller" id="checkbox-9" class="genre_selector" value="yes">
 			<label for="checkbox-10">Oeste</label>
-			<input type="checkbox" name="checkbox-10" id="checkbox-10" class="genre_selector">
+			<input type="checkbox" name="western" id="checkbox-10" class="genre_selector" value="yes">
 			</fieldset>
 
 		<!-- Selector de generos a quitar-->
@@ -129,25 +129,25 @@
 		<fieldset id="no_genres_fieldset" class="fieldset1">
 			<legend>Géneros que NO te gustan:  </legend>
 			<label for="checkbox-11">Acción</label>
-			<input type="checkbox" name="checkbox-11" id="checkbox-11" class="genre_selector">
+			<input type="checkbox" name="action" id="checkbox-11" class="genre_selector" value="no">
 			<label for="checkbox-12">Animación</label>
-			<input type="checkbox" name="checkbox-12" id="checkbox-12" class="genre_selector">
+			<input type="checkbox" name="animation" id="checkbox-12" class="genre_selector" value="no">
 			<label for="checkbox-13">Aventura</label>
-			<input type="checkbox" name="checkbox-13" id="checkbox-13" class="genre_selector">
+			<input type="checkbox" name="adventures" id="checkbox-13" class="genre_selector" value="no">
 			<label for="checkbox-14">Comedia</label>
-			<input type="checkbox" name="checkbox-14" id="checkbox-14" class="genre_selector">
+			<input type="checkbox" name="comedy" id="checkbox-14" class="genre_selector" value="no">
 			<label for="checkbox-15">Drama</label>
-			<input type="checkbox" name="checkbox-15" id="checkbox-15" class="genre_selector">
+			<input type="checkbox" name="drama" id="checkbox-15" class="genre_selector" value="no">
 			<label for="checkbox-16">Fantasía</label>
-			<input type="checkbox" name="checkbox-16" id="checkbox-16" class="genre_selector">
+			<input type="checkbox" name="fantasy" id="checkbox-16" class="genre_selector" value="no">
 			<label for="checkbox-17">Terror</label>
-			<input type="checkbox" name="checkbox-17" id="checkbox-17" class="genre_selector">
+			<input type="checkbox" name="horror" id="checkbox-17" class="genre_selector" value="no">
 			<label for="checkbox-18">Misterio</label>
-			<input type="checkbox" name="checkbox-18" id="checkbox-18" class="genre_selector">
+			<input type="checkbox" name="mistery" id="checkbox-18" class="genre_selector" value="no">
 			<label for="checkbox-19">Thriller</label>
-			<input type="checkbox" name="checkbox-19" id="checkbox-19" class="genre_selector">
+			<input type="checkbox" name="thriller" id="checkbox-19" class="genre_selector" value="no">
 			<label for="checkbox-20">Oeste</label>
-			<input type="checkbox" name="checkbox-20" id="checkbox-20" class="genre_selector">
+			<input type="checkbox" name="western" id="checkbox-20" class="genre_selector" value="no">
 		</fieldset>
 		<!-- Selector de plataforma -->
 		<p>Por último: plataformas de las que quieres ver películas </p>
@@ -155,19 +155,19 @@
 		<fieldset id="platforms_fieldset">
 			<legend>Plataformas: </legend>
 			<label for="checkbox-21">Prime Video</label>
-			<input type="checkbox" name="checkbox-21" id="checkbox-21" class="genre_selector">
+			<input type="checkbox" name="prime" id="checkbox-21" class="genre_selector">
 			<label for="checkbox-22">Netflix</label>
-			<input type="checkbox" name="checkbox-22" id="checkbox-22" class="genre_selector">
+			<input type="checkbox" name="netflix" id="checkbox-22" class="genre_selector">
 			<label for="checkbox-23">iTunes</label>
-			<input type="checkbox" name="checkbox-23" id="checkbox-23" class="genre_selector">
+			<input type="checkbox" name="itunes" id="checkbox-23" class="genre_selector">
 			<label for="checkbox-24">HBO</label>
-			<input type="checkbox" name="checkbox-24" id="checkbox-24" class="genre_selector">
+			<input type="checkbox" name="hbo" id="checkbox-24" class="genre_selector">
 			<label for="checkbox-25">Disney Plus</label>
-			<input type="checkbox" name="checkbox-25" id="checkbox-25" class="genre_selector">
+			<input type="checkbox" name="disney" id="checkbox-25" class="genre_selector">
 			<label for="checkbox-26">Youtube</label>
-			<input type="checkbox" name="checkbox-26" id="checkbox-26" class="genre_selector">
+			<input type="checkbox" name="youtube" id="checkbox-26" class="genre_selector">
 			<label for="checkbox-27">Crunchyroll</label>
-			<input type="checkbox" name="checkbox-27" id="checkbox-27" class="genre_selector">
+			<input type="checkbox" name="crunchyroll" id="checkbox-27" class="genre_selector">
 		</fieldset>
 		
 

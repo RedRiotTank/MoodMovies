@@ -10,7 +10,7 @@ public class Movie {
     private String director;
     private int id;
 
-    private ArrayList<Genre> genres;
+    private ArrayList<Tag> genres;
 
 
     public Movie(String name, int Score, int year, String director){
@@ -57,11 +57,11 @@ public class Movie {
         this.id = id;
     }
 
-    public ArrayList<Genre> getGenres() {
+    public ArrayList<Tag> getGenres() {
         return genres;
     }
 
-    public void setGenres(ArrayList<Genre> genres) {
+    public void setGenres(ArrayList<Tag> genres) {
         this.genres = genres;
     }
 }
