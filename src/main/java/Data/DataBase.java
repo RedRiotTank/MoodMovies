@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataBase {
+public class DataBase extends Connector {
 
-    private String url;
-    private String username;
-    private String password;
+    // constructor para conectar la bd
+    public DataBase(){
+        super();
+    }
+
     private ResultSet resultSet;
     private boolean hasResultSet;
 
