@@ -13,8 +13,13 @@ public class Movie {
     private ArrayList<Tag> genres;
 
 
-    public Movie(String name, int Score, int year, String director){
-
+    public Movie(int id, String name, int score, int year, String director){
+        this.id = id;
+        this.name = name;
+        this.score = score;
+        this.year = year;
+        this.director = director;
+        this.genres = new ArrayList<>();
     }
 
     public String getName() {
