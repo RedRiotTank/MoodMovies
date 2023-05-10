@@ -1,5 +1,7 @@
 package main;
 
+import Data.Connector;
+import Data.DataBase;
 import backend.Recomendator;
 import backend.Tag;
 import backend.stream;
@@ -10,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -19,10 +22,13 @@ import java.util.ArrayList;
  * @author test auth.
  */
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
+    public static void main(String[] args) throws SQLException {
+        System.out.println("Iniciando Sistema de control MoodMovies:");
 
         int portNumber = 8080; // Puerto en el que se va a escuchar
+
+        DataBase database = new DataBase();
+        database.insertMovie();
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             System.out.println("Servidor iniciado. Esperando conexiones entrantes...");

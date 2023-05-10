@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class Connector {
 
-    private static final String URL = "jdbc:mariadb://localhost:<port>/moodmovies";
-    private static final String USERNAME = "usuario";
-    private static final String PASSWORD = "contraseña";
+    private static final String URL = "jdbc:mariadb://34.175.218.19:3306/moodmovies";
+    private static final String USERNAME = "moodMovies";
+    private static final String PASSWORD = "moodPassword";
 
     protected Connection conn;
 
