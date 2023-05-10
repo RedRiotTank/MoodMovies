@@ -28,6 +28,7 @@ public class MovieLoader {
      * certification: para restrictir las peliculas que salgan (p.e. que no sean violentas)
      * include_adult: false
      * include_video: false
+     * page : Página que queremos que muestre, nos va a servir para sacar películas distintas cada vez
      * primary_release_date.gte : fecha DESDE (se pueden meter meses y dias)
      * primary_release_date.lte : fecha HASTA (se pueden meter meses y dias)
      * year : año exacto de la pelicula
@@ -67,6 +68,10 @@ public class MovieLoader {
         }
     }
 
+
+    public void getMovieInfoAPI(String id){
+
+    }
     public void loadMoviesScrap(){
 
     }

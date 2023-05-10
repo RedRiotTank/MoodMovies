@@ -12,8 +12,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import Data.MovieLoader;
+import netscape.javascript.JSObject;
 
 
 /**
@@ -22,8 +26,11 @@ import java.util.ArrayList;
  * @author test auth.
  */
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, URISyntaxException {
         System.out.println("Iniciando Sistema de control MoodMovies:");
+
+        // variables
+        String year_desde, year_hasta;
 
         int portNumber = 8080; // Puerto en el que se va a escuchar
 
@@ -182,10 +189,18 @@ public class Main {
 
                 out.close();
                 clientSocket.close();
+
+                MovieLoader movieLoader = new MovieLoader();
+                movieLoader.discoverMoviesWith("GOOD","1999","2010");
+
             }
         } catch (IOException e) {
             System.err.println("Error al iniciar el servidor en el puerto " + portNumber);
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new URISyntaxException("ee", "ee");
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
 
     }
