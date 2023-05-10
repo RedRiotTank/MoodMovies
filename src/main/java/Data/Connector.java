@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Connector {
 
-    private static final String URL = "jdbc:mariadb://34.175.218.19:3306/moodmovies";
+    private static final String URL = "jdbc:mariadb://34.175.221.97:3306/moodMovies";
     private static final String USERNAME = "moodMovies";
     private static final String PASSWORD = "moodPassword";
 

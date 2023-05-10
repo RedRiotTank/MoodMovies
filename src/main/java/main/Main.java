@@ -35,7 +35,7 @@ public class Main {
         int portNumber = 8080; // Puerto en el que se va a escuchar
 
         DataBase database = new DataBase();
-        database.insertMovie();
+        //database.insertMovie();
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             System.out.println("Servidor iniciado. Esperando conexiones entrantes...");

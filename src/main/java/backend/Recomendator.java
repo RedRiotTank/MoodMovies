@@ -85,6 +85,7 @@ public class Recomendator {
     }
 
     public void makeList(){
+        System.out.printf(Integer.toString(minYear));
 
     }
 
