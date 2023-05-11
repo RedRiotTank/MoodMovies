@@ -2,16 +2,14 @@ package main;
 
 import Data.Connector;
 import Data.DataBase;
+import backend.Mood;
 import backend.Recomendator;
 import backend.Tag;
 import backend.stream;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,6 +34,19 @@ public class Main {
 
         DataBase database = new DataBase();
         //database.insertMovie();
+        String genre_name = database.getGenreNameById(10749);
+        System.out.println("Genero con id 14: " + genre_name);
+        System.out.println("Genero con name ACTION: " + database.getGenreIdByName(Tag.ACTION));
+        MovieLoader movieLoader = new MovieLoader();
+        try{
+            ArrayList<Integer> generos = new ArrayList<>();
+            movieLoader.discoverMoviesWith(Mood.GOOD,"1999","2010", generos);
+        } catch (URISyntaxException e) {
+            throw new URISyntaxException("ee", "ee");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
 
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             System.out.println("Servidor iniciado. Esperando conexiones entrantes...");
@@ -65,6 +76,7 @@ public class Main {
                         for(int i=3; i< formData.length; i++){
                             String a = formData[i].substring(0, formData[i].indexOf("="));
                             String value = formData[i].substring(formData[i].indexOf("=") + 1);
+                            System.out.println(a);
                             switch (a){
                                 case "prime":
                                     stream_plataforms.add(stream.PRIME);
@@ -164,6 +176,34 @@ public class Main {
                                         no_genres.add(Tag.WESTERN);
                                     break;
 
+                                case "crime":
+                                    if(value.equals("yes"))
+                                        yes_genres.add(Tag.CRIME);
+                                    else
+                                        no_genres.add(Tag.CRIME);
+                                    break;
+
+                                case "romance":
+                                    if(value.equals("yes"))
+                                        yes_genres.add(Tag.ROMANCE);
+                                    else
+                                        no_genres.add(Tag.ROMANCE);
+                                    break;
+
+                                case "science_fiction":
+                                    if(value.equals("yes"))
+                                        yes_genres.add(Tag.SCIENCE_FICTION);
+                                    else
+                                        no_genres.add(Tag.SCIENCE_FICTION);
+                                    break;
+
+                                case "history":
+                                    if(value.equals("yes"))
+                                        yes_genres.add(Tag.HISTORY);
+                                    else
+                                        no_genres.add(Tag.HISTORY);
+                                    break;
+
                                 default:
                                     //stream_plataforms.add(stream.HBO);
                                     break;
@@ -189,16 +229,10 @@ public class Main {
 
                 out.close();
                 clientSocket.close();
-
-                MovieLoader movieLoader = new MovieLoader();
-                movieLoader.discoverMoviesWith("GOOD","1999","2010");
-
             }
         } catch (IOException e) {
             System.err.println("Error al iniciar el servidor en el puerto " + portNumber);
             e.printStackTrace();
-        } catch (URISyntaxException e) {
-            throw new URISyntaxException("ee", "ee");
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
