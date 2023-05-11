@@ -49,7 +49,7 @@ public class DataBase extends Connector {
 
         return null;
     }
-
+    // Método que saca el id de un género a partir de un nombre
     public int getGenreIdByName(Tag name) throws SQLException {
         PreparedStatement pstmt = conn.prepareStatement("SELECT Genres.id FROM Genres WHERE name=?");
         pstmt.setString(1, name.toString());

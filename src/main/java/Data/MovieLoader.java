@@ -2,18 +2,26 @@ package Data;
 
 
 
-import netscape.javascript.JSObject;
+import backend.Mood;
+import backend.Tag;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import backend.mood;
+import backend.Mood;
 
 public class MovieLoader {
+
+    DataBase db = new DataBase();
 
     private static String API_KEY = "api_key=e37359bf96dd4a19ed90f8d427112595";
     /* DOCUMENTACION API (método discover)
@@ -41,9 +49,35 @@ public class MovieLoader {
      * with_original_language : idioma original (EN PRINCIPIO NO SE USA)
      ------------------------------------------------------------------
      *
+
+
      * */
-    public void discoverMoviesWith(String mood,String first_year, String second_year) throws URISyntaxException {
+    public void discoverMoviesWith(Mood mood, String first_year, String second_year, ArrayList<Integer> generos) throws URISyntaxException, SQLException, UnsupportedEncodingException {
         HttpClient client = HttpClient.newHttpClient();
+        int aux_id = 0;
+        String peticion = " ";
+        // Con mood contento, se asignan los géneros Comedia, thriller y ciencia ficcion
+        // Falta añadir los géneros que selecciona el usuario y añadirlo al String generosParametroCodificado.
+        //
+        if(mood.equals(Mood.GOOD)){
+
+            aux_id = db.getGenreIdByName(Tag.SCIENCE_FICTION);
+            generos.add(aux_id);
+            aux_id = db.getGenreIdByName(Tag.COMEDY);
+            generos.add(aux_id);
+            aux_id = db.getGenreIdByName(Tag.THRILLER);
+            generos.add(aux_id);
+
+            List<String> generosLikeText = new ArrayList<>();
+            for(Integer id : generos){
+                generosLikeText.add(String.valueOf(id));
+            }
+
+            String generos_parameters = String.join("%20", generosLikeText);
+            String generosParametroCodificado = URLEncoder.encode(generos_parameters, "UTF-8");
+
+            peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ generosParametroCodificado;
+        }
 
         /* propuesta dependiendo del estado de animo que tengamos, se añaden unos generos u otros.
         Falta ver como procesar esa lista de generos
@@ -52,7 +86,7 @@ public class MovieLoader {
         }
         */
 
-        HttpRequest request = HttpRequest.newBuilder(new URI("https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate"))
+        HttpRequest request = HttpRequest.newBuilder(new URI(peticion))
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .GET()
