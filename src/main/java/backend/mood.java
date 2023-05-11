@@ -1,6 +1,6 @@
 package backend;
 
-public enum mood {
+public enum Mood {
     GOOD,
     NORMAL,
     BAD

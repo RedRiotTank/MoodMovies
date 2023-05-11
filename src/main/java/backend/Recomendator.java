@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Recomendator {
 
-    private mood mood;
+    private Mood mood;
     private int minYear;
     private int maxYear;
     private ArrayList<stream> plataforms;
@@ -20,14 +20,14 @@ public class Recomendator {
 
         switch (mood){
             case "good":
-                this.mood = backend.mood.GOOD;
+                this.mood = backend.Mood.GOOD;
                 break;
             default:
             case "normal":
-                this.mood = backend.mood.NORMAL;
+                this.mood = backend.Mood.NORMAL;
                 break;
             case "bad":
-                this.mood = backend.mood.BAD;
+                this.mood = backend.Mood.BAD;
                 break;
         }
 
@@ -67,11 +67,11 @@ public class Recomendator {
         this.maxYear = maxYear;
     }
 
-    public mood getMood() {
+    public Mood getMood() {
         return mood;
     }
 
-    public void setMood(mood mood) {
+    public void setMood(Mood mood) {
         this.mood = mood;
     }
 
