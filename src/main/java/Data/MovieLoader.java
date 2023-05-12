@@ -16,12 +16,24 @@ import java.net.http.HttpResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import backend.Mood;
 
 public class MovieLoader {
 
     DataBase db = new DataBase();
+
 
     private static String API_KEY = "api_key=e37359bf96dd4a19ed90f8d427112595";
     /* DOCUMENTACION API (método discover)
@@ -107,6 +119,56 @@ public class MovieLoader {
 
     }
     public void loadMoviesScrap(){
+
+    }
+
+    public static void scrapIMG(String title) throws IOException {
+        title = title.toLowerCase().replace(" ", "-");
+        // Establecer la URL de la página web que se va a analizar
+        String url = "https://www.metacritic.com/movie/";
+        url = url + title;
+
+        // Conectar con la página web y descargar el código fuente HTML
+        Document document = Jsoup.connect(url).get();
+
+        // Buscar la imagen con la clase "summary_img" en el código fuente HTML
+        Element element = document.selectFirst("img.summary_img");
+
+        // Obtener la URL de la imagen
+        String imageUrl = element.attr("src");
+
+        // Descargar la imagen y guardarla en el directorio "images"
+        URL urlObject = new URL(imageUrl);
+        String fileName = title + ".jpg"; // o el formato que desees
+        Path targetPath = Paths.get("images", fileName);
+        Files.copy(urlObject.openStream(), targetPath);
+    }
+
+    public static void scrapRating(String tituloPelicula){
+        String tituloPeliculaCambiado = tituloPelicula.replace(" ", "_");
+        String url = "https://www.rottentomatoes.com/m/" + tituloPeliculaCambiado;
+        String valoracion = "";
+
+        try {
+            Document document = Jsoup.connect(url).get();
+            String entrada = document.toString();
+
+            String regex = "ratingValue\":\"(\\d+)\"";
+
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(entrada);
+
+            if (matcher.find()) {
+                String ratingValue = matcher.group(1);
+                System.out.println(ratingValue);
+            } else {
+                System.out.println("No se encontró ninguna coincidencia.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
