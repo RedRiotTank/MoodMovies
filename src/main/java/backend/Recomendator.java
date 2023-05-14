@@ -124,5 +124,18 @@ public class Recomendator {
         return null;
     }
 
-
+    @Override
+    public String toString() {
+        return "Recomendator{" +
+                "mood=" + mood +
+                ", minYear=" + minYear +
+                ", maxYear=" + maxYear +
+                ", plataforms=" + plataforms +
+                ", yes_genres=" + yes_genres +
+                ", no_genres=" + no_genres +
+                ", search_by=" + search_by +
+                ", discard=" + discard +
+                ", quality=" + quality +
+                '}';
+    }
 }

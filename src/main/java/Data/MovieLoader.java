@@ -64,6 +64,7 @@ public class MovieLoader {
 
 
      * */
+    // Añadir los dos arratList generados.
     public void discoverMoviesWith(Mood mood, String first_year, String second_year, ArrayList<Integer> generos) throws URISyntaxException, SQLException, UnsupportedEncodingException {
         HttpClient client = HttpClient.newHttpClient();
         int aux_id = 0;
@@ -85,7 +86,7 @@ public class MovieLoader {
                 generosLikeText.add(String.valueOf(id));
             }
 
-            String generos_parameters = String.join("%20", generosLikeText);
+            String generos_parameters = String.join("%2C", generosLikeText);
             String generosParametroCodificado = URLEncoder.encode(generos_parameters, "UTF-8");
 
             peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ generosParametroCodificado;
