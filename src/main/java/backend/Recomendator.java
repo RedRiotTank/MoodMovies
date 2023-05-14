@@ -11,16 +11,24 @@ public class Recomendator {
     private ArrayList<Tag> yes_genres;
     private ArrayList<Tag> no_genres;
 
-    private boolean quality;
+    private ArrayList<Tag> search_by;
 
-    private ArrayList<Movie> recomList;
+    private ArrayList<Tag> discard;
+    private boolean quality;
 
 
     public Recomendator(String mood, int minYear, int maxYear,  ArrayList<stream> plataforms,ArrayList<Tag> yes_genres,ArrayList<Tag> no_genres){
-
+        search_by = new ArrayList<>();
+        discard = new ArrayList<>();
         switch (mood){
             case "good":
                 this.mood = backend.Mood.GOOD;
+                search_by.add(Tag.COMEDY);
+                search_by.add(Tag.ADVENTURE);
+                search_by.add(Tag.ANIMATION);
+                discard.add(Tag.HORROR);
+                discard.add(Tag.DRAMA);
+                discard.add(Tag.CRIME);
                 break;
             default:
             case "normal":
@@ -28,6 +36,13 @@ public class Recomendator {
                 break;
             case "bad":
                 this.mood = backend.Mood.BAD;
+                search_by.add(Tag.HORROR);
+                search_by.add(Tag.DRAMA);
+                search_by.add(Tag.THRILLER);
+                search_by.add(Tag.MYSTERY);
+                discard.add(Tag.COMEDY);
+                discard.add(Tag.WESTERN);
+                discard.add(Tag.ANIMATION);
                 break;
         }
 
@@ -39,8 +54,28 @@ public class Recomendator {
         this.yes_genres = yes_genres;
         this.no_genres = no_genres;
 
+        for(Tag genre : yes_genres){
+
+            if(discard.contains(genre))
+                discard.remove(genre);
+
+            search_by.add(genre);
+
+        }
+
+        for(Tag genre : no_genres){
+
+            if(search_by.contains(genre))
+                search_by.remove(genre);
+
+            discard.add(genre);
+
+        }
+
 
     }
+
+
 
 
     public boolean getQuality() {
@@ -84,9 +119,9 @@ public class Recomendator {
 
     }
 
-    public void makeList(){
+    public ArrayList<Movie> makeList(){
         System.out.printf(Integer.toString(minYear));
-
+        return null;
     }
 
 

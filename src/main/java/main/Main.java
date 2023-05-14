@@ -2,11 +2,12 @@ package main;
 
 
 import Data.DataBase;
+import backend.Movie;
 import backend.Recomendator;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 
 
 /**
@@ -19,20 +20,16 @@ public class Main {
 
         System.out.println("Iniciando Sistema de control MoodMovies:");
 
-        // variables
-        String year_desde, year_hasta;
-
-
-        DataBase database = new DataBase();
+        //DataBase database = new DataBase();
 
         while(true){
             HTTPsocket http_request = new HTTPsocket();
 
             Recomendator recomendation = http_request.loadRecomedationInfo();
 
-            recomendation.makeList();
+            ArrayList<Movie> movieList = recomendation.makeList();
 
-
+            /*Procesamiento de la lista de peliculas a código HTML*/
 
             http_request.httpOUT();
 
