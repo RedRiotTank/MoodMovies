@@ -27,7 +27,7 @@ public class Main {
 
             Recomendator recomendation = http_request.loadRecomedationInfo();
 
-            ArrayList<Movie> movieList = recomendation.makeList();
+            ArrayList<Movie> movieList = recomendation.makeList(recomendation);
 
             /*Procesamiento de la lista de peliculas a código HTML*/
 

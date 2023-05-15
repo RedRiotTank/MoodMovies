@@ -1,5 +1,10 @@
 package backend;
 
+import Data.MovieLoader;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Recomendator {
@@ -155,7 +160,8 @@ public class Recomendator {
 
     }
 
-    public ArrayList<Movie> makeList(){
+    public ArrayList<Movie> makeList(Recomendator recomendation) throws SQLException, UnsupportedEncodingException, URISyntaxException {
+        MovieLoader.discoverMoviesWith(Integer.toString(recomendation.minYear), Integer.toString(recomendation.maxYear), recomendation.getSearch_by(), recomendation.getDiscard());
 
         /*consulta SQL
 

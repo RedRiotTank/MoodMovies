@@ -65,39 +65,18 @@ public class MovieLoader {
 
      * */
     // Añadir los dos arratList generados.
-    public void discoverMoviesWith(Mood mood, String first_year, String second_year, ArrayList<Integer> generos) throws URISyntaxException, SQLException, UnsupportedEncodingException {
+    public static void discoverMoviesWith(String first_year, String second_year, ArrayList<String> searchBy, ArrayList<String> discard) throws URISyntaxException, SQLException, UnsupportedEncodingException {
         HttpClient client = HttpClient.newHttpClient();
-        int aux_id = 0;
         String peticion = " ";
-        // Con mood contento, se asignan los géneros Comedia, thriller y ciencia ficcion
-        // Falta añadir los géneros que selecciona el usuario y añadirlo al String generosParametroCodificado.
-        //
-        if(mood.equals(Mood.GOOD)){
 
-            aux_id = db.getGenreIdByName(Tag.SCIENCE_FICTION);
-            generos.add(aux_id);
-            aux_id = db.getGenreIdByName(Tag.COMEDY);
-            generos.add(aux_id);
-            aux_id = db.getGenreIdByName(Tag.THRILLER);
-            generos.add(aux_id);
+        // Procesamiento de los arrays de géneros.
+        String search_by_parameters = String.join("%20%7C%7C%20", searchBy);
+        String searchByParametroCodificado = URLEncoder.encode(search_by_parameters, "UTF-8");
 
-            List<String> generosLikeText = new ArrayList<>();
-            for(Integer id : generos){
-                generosLikeText.add(String.valueOf(id));
-            }
+        String discard_parameters = String.join("%2C", discard);
+        String discardParametroCodificado = URLEncoder.encode(discard_parameters, "UTF-8");
 
-            String generos_parameters = String.join("%2C", generosLikeText);
-            String generosParametroCodificado = URLEncoder.encode(generos_parameters, "UTF-8");
-
-            peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ generosParametroCodificado;
-        }
-
-        /* propuesta dependiendo del estado de animo que tengamos, se añaden unos generos u otros.
-        Falta ver como procesar esa lista de generos
-        if(mood.equals(mood.GOOD)){
-            generos = {...}
-        }
-        */
+        peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ searchByParametroCodificado + "&without_genres="+discardParametroCodificado;
 
         HttpRequest request = HttpRequest.newBuilder(new URI(peticion))
                 .header("Accept", "application/json")
