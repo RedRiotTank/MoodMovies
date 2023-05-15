@@ -115,12 +115,28 @@ public class Recomendator {
         return null;
     }
 
+    public ArrayList<Tag> getSearch_by() {
+        return search_by;
+    }
+
+    public ArrayList<Tag> getDiscard() {
+        return discard;
+    }
+
     public void setMovies(ArrayList<Movie> movies){
 
     }
 
     public ArrayList<Movie> makeList(){
-        System.out.printf(Integer.toString(minYear));
+
+        /*consulta SQL
+
+            Si obtengo + de n resultados, creamos el array de películas con ellas y lo devolvemos.
+            Si obtengo - de n resulsultados hacemos una solicitud a la API que busque peliculas con determinados géneros y sin determinados géneros.
+         */
+
+
+
         return null;
     }
 
