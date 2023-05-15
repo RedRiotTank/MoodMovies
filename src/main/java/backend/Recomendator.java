@@ -11,9 +11,11 @@ public class Recomendator {
     private ArrayList<Tag> yes_genres;
     private ArrayList<Tag> no_genres;
 
-    private ArrayList<Tag> search_by;
+    private ArrayList<String> search_by;
 
-    private ArrayList<Tag> discard;
+    private ArrayList<String> discard;
+
+
     private boolean quality;
 
 
@@ -23,12 +25,12 @@ public class Recomendator {
         switch (mood){
             case "good":
                 this.mood = backend.Mood.GOOD;
-                search_by.add(Tag.COMEDY);
-                search_by.add(Tag.ADVENTURE);
-                search_by.add(Tag.ANIMATION);
-                discard.add(Tag.HORROR);
-                discard.add(Tag.DRAMA);
-                discard.add(Tag.CRIME);
+                search_by.add("35");    //comedy
+                search_by.add("12");    //adventure
+                search_by.add("16");    //adventure
+                discard.add("27");      //Horror
+                discard.add("18"); //drama
+                discard.add("80");  //crime
                 break;
             default:
             case "normal":
@@ -36,13 +38,13 @@ public class Recomendator {
                 break;
             case "bad":
                 this.mood = backend.Mood.BAD;
-                search_by.add(Tag.HORROR);
-                search_by.add(Tag.DRAMA);
-                search_by.add(Tag.THRILLER);
-                search_by.add(Tag.MYSTERY);
-                discard.add(Tag.COMEDY);
-                discard.add(Tag.WESTERN);
-                discard.add(Tag.ANIMATION);
+                search_by.add("27");    //horror
+                search_by.add("18");    //drama
+                search_by.add("53");    //Thriller
+                search_by.add("9648");  //mistery
+                discard.add("35");      //comedy
+                discard.add("37");      //western
+                discard.add("16"); //animation
                 break;
         }
 
@@ -59,7 +61,7 @@ public class Recomendator {
             if(discard.contains(genre))
                 discard.remove(genre);
 
-            search_by.add(genre);
+            search_by.add(tagtostring(genre));
 
         }
 
@@ -68,13 +70,39 @@ public class Recomendator {
             if(search_by.contains(genre))
                 search_by.remove(genre);
 
-            discard.add(genre);
+            discard.add(tagtostring(genre));
 
         }
 
 
+
+
+
+
     }
 
+
+    public String tagtostring(Tag tag){
+        String result = null;
+        switch (tag){
+            case ADVENTURE -> result = "12";
+            case FANTASY -> result = "14";
+            case ANIMATION -> result = "16";
+            case DRAMA -> result = "18";
+            case HORROR -> result = "27";
+            case ACTION -> result = "28";
+            case COMEDY -> result = "35";
+            case HISTORY -> result = "36";
+            case WESTERN -> result = "37";
+            case THRILLER -> result = "53";
+            case CRIME -> result = "80";
+            case MYSTERY -> result = "9648";
+            case ROMANCE -> result = "10749";
+        }
+
+        return result;
+
+    }
 
 
 
@@ -115,11 +143,11 @@ public class Recomendator {
         return null;
     }
 
-    public ArrayList<Tag> getSearch_by() {
+    public ArrayList<String> getSearch_by() {
         return search_by;
     }
 
-    public ArrayList<Tag> getDiscard() {
+    public ArrayList<String> getDiscard() {
         return discard;
     }
 
