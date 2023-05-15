@@ -200,7 +200,7 @@ public class HTTPsocket {
                     break;
 
                 default:
-                    //stream_plataforms.add(stream.HBO);
+
                     break;
             }
         }

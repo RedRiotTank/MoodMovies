@@ -30,12 +30,12 @@ public class Recomendator {
         switch (mood){
             case "good":
                 this.mood = backend.Mood.GOOD;
-                search_by.add("35");    //comedy
-                search_by.add("12");    //adventure
-                search_by.add("16");    //adventure
-                discard.add("27");      //Horror
-                discard.add("18"); //drama
-                discard.add("80");  //crime
+                search_by.add(tagtostring(Tag.COMEDY));
+                search_by.add(tagtostring(Tag.ADVENTURE));
+                search_by.add(tagtostring(Tag.ANIMATION));
+                discard.add(tagtostring(Tag.HORROR));
+                discard.add(tagtostring(Tag.DRAMA));
+                discard.add(tagtostring(Tag.CRIME));
                 break;
             default:
             case "normal":
@@ -43,13 +43,13 @@ public class Recomendator {
                 break;
             case "bad":
                 this.mood = backend.Mood.BAD;
-                search_by.add("27");    //horror
-                search_by.add("18");    //drama
-                search_by.add("53");    //Thriller
-                search_by.add("9648");  //mistery
-                discard.add("35");      //comedy
-                discard.add("37");      //western
-                discard.add("16"); //animation
+                search_by.add(tagtostring(Tag.HORROR));
+                search_by.add(tagtostring(Tag.DRAMA));
+                search_by.add(tagtostring(Tag.THRILLER));
+                search_by.add(tagtostring(Tag.MYSTERY));
+                discard.add(tagtostring(Tag.COMEDY));
+                discard.add(tagtostring(Tag.WESTERN));
+                discard.add(tagtostring(Tag.ANIMATION));
                 break;
         }
 
@@ -63,8 +63,8 @@ public class Recomendator {
 
         for(Tag genre : yes_genres){
 
-            if(discard.contains(genre))
-                discard.remove(genre);
+            if(discard.contains(tagtostring(genre)))
+                discard.remove(tagtostring(genre));
 
             search_by.add(tagtostring(genre));
 
@@ -72,18 +72,12 @@ public class Recomendator {
 
         for(Tag genre : no_genres){
 
-            if(search_by.contains(genre))
-                search_by.remove(genre);
+            if(search_by.contains(tagtostring(genre)))
+                search_by.remove(tagtostring(genre));
 
             discard.add(tagtostring(genre));
 
         }
-
-
-
-
-
-
     }
 
 
@@ -103,6 +97,7 @@ public class Recomendator {
             case CRIME -> result = "80";
             case MYSTERY -> result = "9648";
             case ROMANCE -> result = "10749";
+            case SCIENCE_FICTION -> result = "878";
         }
 
         return result;
