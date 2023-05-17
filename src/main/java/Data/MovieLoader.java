@@ -4,7 +4,7 @@ package Data;
 
 import backend.Mood;
 import backend.Tag;
-
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -75,7 +75,7 @@ public class MovieLoader {
 
      * */
     // Añadir los dos arratList generados.
-    public static void discoverMoviesWith(boolean popularity,String first_year, String second_year, ArrayList<String> searchBy, ArrayList<String> discard) throws URISyntaxException, SQLException, UnsupportedEncodingException {
+    public void discoverMoviesWith(boolean popularity_mode,String first_year, String second_year, ArrayList<String> searchBy, ArrayList<String> discard) throws URISyntaxException, SQLException, UnsupportedEncodingException {
         // datos para peliculas:
         String movie_name = " ", movie_year = " ";
         double movie_popularity = 0.0;
@@ -109,20 +109,30 @@ public class MovieLoader {
 
             // Recorrer todas las películas
             for (JsonNode movieNode : resultsNode) {
-                String nombre = movieNode.get("title").asText();
-                scrapIMG(nombre);
-                double popularidad = movieNode.get("popularity").asDouble();
-                String año = movieNode.get("release_date").asText().substring(0, 4);
-                String[] generos = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
                 int id = movieNode.get("id").asInt();
 
-                // insercion bd
-                
+                String title = movieNode.get("title").asText();
+                String year = movieNode.get("release_date").asText().substring(0, 4);
+                double popularity = movieNode.get("popularity").asDouble();
+                double score = 0.0;
+
+                scrapIMG(title);
+
+                String[] genres = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
+
+
+                // insercion
+                db.insertMovie(id,title,year,popularity,score);
+
+                for(int i=0; i<genres.length; i++){
+                    db.insertMovieGenre(id,Integer.parseInt(genres[i]));
+                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
+
 
 
     public void getMovieInfoAPI(String id){
@@ -132,27 +142,45 @@ public class MovieLoader {
 
     }
 
-    public static void scrapIMG(String title) throws IOException {
-        title = title.toLowerCase().replace(" ", "-");
-        // Establecer la URL de la página web que se va a analizar
-        String url = "https://www.metacritic.com/movie/";
-        url = url + title;
 
-        // Conectar con la página web y descargar el código fuente HTML
-        Document document = Jsoup.connect(url).get();
 
-        // Buscar la imagen con la clase "summary_img" en el código fuente HTML
-        Element element = document.selectFirst("img.summary_img");
+    public static void scrapIMG(String title) {
+        title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
+        String fileName = title + ".jpg";
+        String filePath = "images/" + fileName;
 
-        // Obtener la URL de la imagen
-        String imageUrl = element.attr("src");
+        // Verificar si el archivo ya existe
+        File file = new File(filePath);
+        if (file.exists()) {
+            System.out.println("La imagen ya existe. No se ejecutará el scrapping.");
+            return; // Salir del método
+        }
 
-        // Descargar la imagen y guardarla en el directorio "images"
-        URL urlObject = new URL(imageUrl);
-        String fileName = title + ".jpg"; // o el formato que desees
-        Path targetPath = Paths.get("images", fileName);
-        Files.copy(urlObject.openStream(), targetPath);
+        try {
+            // Establecer la URL de la página web que se va a analizar
+            String url = "https://www.metacritic.com/movie/";
+            url = url + title;
+
+            // Conectar con la página web y descargar el código fuente HTML
+            Document document = Jsoup.connect(url).get();
+
+            // Buscar la imagen con la clase "summary_img" en el código fuente HTML
+            Element element = document.selectFirst("img.summary_img");
+
+            // Obtener la URL de la imagen
+            String imageUrl = element.attr("src");
+
+            // Descargar la imagen y guardarla en el directorio "images"
+            URL urlObject = new URL(imageUrl);
+            Path targetPath = Paths.get("images", fileName);
+            Files.copy(urlObject.openStream(), targetPath);
+        } catch (IOException e) {
+            // Manejar la excepción de conexión o descarga de imagen aquí
+            System.out.println("No se pudo conectar o descargar la imagen: " + e.getMessage());
+        }
     }
+
+
 
     public static void scrapRating(String tituloPelicula){
         String tituloPeliculaCambiado = tituloPelicula.replace(" ", "_");

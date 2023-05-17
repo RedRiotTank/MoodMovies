@@ -148,8 +148,8 @@ public class Recomendator {
 
     }
 
-    public ArrayList<Movie> makeList() throws SQLException, UnsupportedEncodingException, URISyntaxException {
-        MovieLoader.discoverMoviesWith(popularity,Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
+    public ArrayList<Movie> makeList(MovieLoader mvloader) throws SQLException, UnsupportedEncodingException, URISyntaxException {
+        mvloader.discoverMoviesWith(popularity,Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
 
         /*consulta SQL
 

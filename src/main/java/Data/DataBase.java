@@ -18,11 +18,52 @@ public class DataBase extends Connector {
     private ResultSet resultSet;
     private boolean hasResultSet;
 
-    public void insertMovie() throws SQLException {
-        //INSERCIÓN DE PRUEBA.
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO Genres (id,name) VALUES(2,'TEST2JAVA')");
-        stmt.execute();
+    public void insertMovieGenre(int movieId, int genreId) {
+        // Insertar la tupla en la tabla Movies_Genres
+        String insertQuery = "INSERT INTO Movies_Genres (movie_id, genre_id) VALUES (?, ?)";
+        try {
+            try (PreparedStatement statement = conn.prepareStatement(insertQuery)) {
+                statement.setInt(1, movieId);
+                statement.setInt(2, genreId);
+
+                statement.executeUpdate();
+            }
+            System.out.println("La tupla ha sido insertada en la tabla Movies_Genres.");
+        } catch (SQLException e) {
+            System.out.println("No se pudo insertar la tupla en la tabla Movies_Genres: " + e.getMessage());
+        }
     }
+
+
+
+    public void insertMovie(int id, String title, String year, double popularity, double score) throws SQLException {
+        // Verificar si la ID ya existe en la base de datos
+        String checkQuery = "SELECT COUNT(*) FROM Movies WHERE id = ?";
+        try (PreparedStatement checkStatement = conn.prepareStatement(checkQuery)) {
+            checkStatement.setInt(1, id);
+            try (ResultSet resultSet = checkStatement.executeQuery()) {
+                resultSet.next();
+                int count = resultSet.getInt(1);
+                if (count > 0) {
+                    System.out.println("La ID ya existe en la base de datos. No se insertará la tupla.");
+                    return; // Salir del método
+                }
+            }
+        }
+
+        // Insertar la tupla en la base de datos
+        String insertQuery = "INSERT INTO Movies (id, title, year, popularity, score) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = conn.prepareStatement(insertQuery)) {
+            statement.setInt(1, id);
+            statement.setString(2, title);
+            statement.setString(3, year);
+            statement.setDouble(4, popularity);
+            statement.setDouble(5, score);
+
+            statement.executeUpdate();
+        }
+    }
+
 
     public String getMovieInfo(){
         Statement stmt = null;

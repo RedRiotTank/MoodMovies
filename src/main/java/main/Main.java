@@ -29,7 +29,7 @@ public class Main {
 
             Recomendator recomendation = http_request.loadRecomedationInfo(mvloader);
 
-            ArrayList<Movie> movieList = recomendation.makeList();
+            ArrayList<Movie> movieList = recomendation.makeList(mvloader);
 
             /*Procesamiento de la lista de peliculas a código HTML*/
 
