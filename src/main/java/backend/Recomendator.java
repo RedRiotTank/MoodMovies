@@ -21,10 +21,11 @@ public class Recomendator {
     private ArrayList<String> discard;
 
 
-    private boolean quality;
+    private boolean popularity;
 
 
-    public Recomendator(String mood, int minYear, int maxYear,  ArrayList<stream> plataforms,ArrayList<Tag> yes_genres,ArrayList<Tag> no_genres, MovieLoader mvloader){
+    public Recomendator(String mood, int minYear, int maxYear,  ArrayList<stream> plataforms,ArrayList<Tag> yes_genres,ArrayList<Tag> no_genres,Boolean popularity, MovieLoader mvloader){
+        this.popularity = popularity;
         search_by = new ArrayList<>();
         discard = new ArrayList<>();
         switch (mood){
@@ -104,16 +105,6 @@ public class Recomendator {
 
     }
 
-
-
-    public boolean getQuality() {
-        return quality;
-    }
-
-    public void setQuality(boolean quality) {
-        this.quality = quality;
-    }
-
     public int getMinYear() {
         return minYear;
     }
@@ -155,8 +146,8 @@ public class Recomendator {
 
     }
 
-    public ArrayList<Movie> makeList(Recomendator recomendation) throws SQLException, UnsupportedEncodingException, URISyntaxException {
-        MovieLoader.discoverMoviesWith(Integer.toString(recomendation.minYear), Integer.toString(recomendation.maxYear), recomendation.getSearch_by(), recomendation.getDiscard());
+    public ArrayList<Movie> makeList() throws SQLException, UnsupportedEncodingException, URISyntaxException {
+        MovieLoader.discoverMoviesWith(popularity,Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
 
         /*consulta SQL
 
@@ -169,18 +160,4 @@ public class Recomendator {
         return null;
     }
 
-    @Override
-    public String toString() {
-        return "Recomendator{" +
-                "mood=" + mood +
-                ", minYear=" + minYear +
-                ", maxYear=" + maxYear +
-                ", plataforms=" + plataforms +
-                ", yes_genres=" + yes_genres +
-                ", no_genres=" + no_genres +
-                ", search_by=" + search_by +
-                ", discard=" + discard +
-                ", quality=" + quality +
-                '}';
-    }
 }

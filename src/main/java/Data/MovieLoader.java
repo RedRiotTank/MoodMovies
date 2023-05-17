@@ -16,9 +16,14 @@ import java.net.http.HttpResponse;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.json.JSONObject;
+import org.json.JSONArray;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +33,7 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import backend.Mood;
 
 public class MovieLoader {
@@ -36,7 +42,6 @@ public class MovieLoader {
 
     public MovieLoader(DataBase db){
         this.db = db;
-
     }
 
 
@@ -70,32 +75,52 @@ public class MovieLoader {
 
      * */
     // Añadir los dos arratList generados.
-    public static void discoverMoviesWith(String first_year, String second_year, ArrayList<String> searchBy, ArrayList<String> discard) throws URISyntaxException, SQLException, UnsupportedEncodingException {
+    public static void discoverMoviesWith(boolean popularity,String first_year, String second_year, ArrayList<String> searchBy, ArrayList<String> discard) throws URISyntaxException, SQLException, UnsupportedEncodingException {
+        // datos para peliculas:
+        String movie_name = " ", movie_year = " ";
+        double movie_popularity = 0.0;
+        JSONArray genreIds = new JSONArray();
+
         HttpClient client = HttpClient.newHttpClient();
         String peticion = " ";
 
         // Procesamiento de los arrays de géneros.
         String search_by_parameters = String.join("%20%7C%7C%20", searchBy);
-        String searchByParametroCodificado = URLEncoder.encode(search_by_parameters, "UTF-8");
+        //String searchByParametroCodificado = URLEncoder.encode(search_by_parameters, "UTF-8");
 
         String discard_parameters = String.join("%2C", discard);
-        String discardParametroCodificado = URLEncoder.encode(discard_parameters, "UTF-8");
+        //String discardParametroCodificado = URLEncoder.encode(discard_parameters, "UTF-8");
 
-        peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ searchByParametroCodificado + "&without_genres="+discardParametroCodificado;
+        peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ search_by_parameters + "&without_genres="+discard_parameters;
 
         HttpRequest request = HttpRequest.newBuilder(new URI(peticion))
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
-        try{
-            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String jsonResponse = httpResponse.body();
-            System.out.println(jsonResponse);
-        } catch(InterruptedException e){
-            System.out.println(e);
-        } catch(IOException e){
-            System.out.println(e);
+
+        try {
+            // Obtener el JSON desde el enlace
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(new URL(peticion));
+
+            // Obtener el array de resultados
+            JsonNode resultsNode = rootNode.get("results");
+
+            // Recorrer todas las películas
+            for (JsonNode movieNode : resultsNode) {
+                String nombre = movieNode.get("title").asText();
+                scrapIMG(nombre);
+                double popularidad = movieNode.get("popularity").asDouble();
+                String año = movieNode.get("release_date").asText().substring(0, 4);
+                String[] generos = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
+                int id = movieNode.get("id").asInt();
+
+                // insercion bd
+                
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -67,6 +67,7 @@ public class HTTPsocket {
 
         ArrayList<Tag> yes_genres = new ArrayList<>();
         ArrayList<Tag> no_genres = new ArrayList<>();
+        boolean popularity = false;
 
         for(int i=3; i< formData.length; i++){
             String checkBoxInfo = formData[i].substring(0, formData[i].indexOf("="));
@@ -200,13 +201,19 @@ public class HTTPsocket {
                         no_genres.add(Tag.HISTORY);
                     break;
 
+                case "popularity":
+                    if(value.equals("yes")) popularity = true;
+                    else popularity = false;
+
+
+
                 default:
 
                     break;
             }
         }
 
-        return new Recomendator(mood,min_year,max_year, stream_plataforms,yes_genres,no_genres, mvloader);
+        return new Recomendator(mood,min_year,max_year, stream_plataforms,yes_genres,no_genres,popularity, mvloader);
     }
 
     public void httpOUT() throws IOException {

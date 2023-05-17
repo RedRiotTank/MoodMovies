@@ -27,11 +27,9 @@ public class Main {
         while(true){
             HTTPsocket http_request = new HTTPsocket();
 
-
-
             Recomendator recomendation = http_request.loadRecomedationInfo(mvloader);
 
-            ArrayList<Movie> movieList = recomendation.makeList(recomendation);
+            ArrayList<Movie> movieList = recomendation.makeList();
 
             /*Procesamiento de la lista de peliculas a código HTML*/
 
