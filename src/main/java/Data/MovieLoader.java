@@ -32,7 +32,12 @@ import backend.Mood;
 
 public class MovieLoader {
 
-    DataBase db = new DataBase();
+    DataBase db = null;
+
+    public MovieLoader(DataBase db){
+        this.db = db;
+
+    }
 
 
     private static String API_KEY = "api_key=e37359bf96dd4a19ed90f8d427112595";

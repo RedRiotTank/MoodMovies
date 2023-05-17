@@ -1,5 +1,6 @@
 package main;
 
+import Data.MovieLoader;
 import backend.Recomendator;
 
 import java.io.BufferedReader;
@@ -57,7 +58,7 @@ public class HTTPsocket {
         return null;
     }
 
-    public Recomendator loadRecomedationInfo(){
+    public Recomendator loadRecomedationInfo( MovieLoader mvloader){
 
         String mood = formData[0].substring(formData[0].indexOf("=") + 1);
         int min_year = Integer.parseInt(formData[1].substring(formData[1].indexOf("=") + 1));
@@ -205,7 +206,7 @@ public class HTTPsocket {
             }
         }
 
-        return new Recomendator(mood,min_year,max_year, stream_plataforms,yes_genres,no_genres);
+        return new Recomendator(mood,min_year,max_year, stream_plataforms,yes_genres,no_genres, mvloader);
     }
 
     public void httpOUT() throws IOException {

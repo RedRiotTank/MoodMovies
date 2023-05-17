@@ -24,7 +24,7 @@ public class Recomendator {
     private boolean quality;
 
 
-    public Recomendator(String mood, int minYear, int maxYear,  ArrayList<stream> plataforms,ArrayList<Tag> yes_genres,ArrayList<Tag> no_genres){
+    public Recomendator(String mood, int minYear, int maxYear,  ArrayList<stream> plataforms,ArrayList<Tag> yes_genres,ArrayList<Tag> no_genres, MovieLoader mvloader){
         search_by = new ArrayList<>();
         discard = new ArrayList<>();
         switch (mood){

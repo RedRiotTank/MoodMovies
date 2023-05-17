@@ -2,6 +2,7 @@ package main;
 
 
 import Data.DataBase;
+import Data.MovieLoader;
 import backend.Movie;
 import backend.Recomendator;
 import java.io.*;
@@ -20,12 +21,15 @@ public class Main {
 
         System.out.println("Iniciando Sistema de control MoodMovies:");
 
-        //DataBase database = new DataBase();
+        DataBase database = new DataBase();
+        MovieLoader mvloader = new MovieLoader(database);
 
         while(true){
             HTTPsocket http_request = new HTTPsocket();
 
-            Recomendator recomendation = http_request.loadRecomedationInfo();
+
+
+            Recomendator recomendation = http_request.loadRecomedationInfo(mvloader);
 
             ArrayList<Movie> movieList = recomendation.makeList(recomendation);
 
