@@ -11,6 +11,23 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<!-- nuestro js-->
 	<script type="text/javascript" src="js/index1.js"></script>
+	<script>
+		function checkGenres() {
+			var yesGenres = document.querySelectorAll('#yes_genres_fieldset input.genre_selector:checked');
+			var noGenres = document.querySelectorAll('#no_genres_fieldset input.genre_selector:checked');
+
+			for (var i = 0; i < yesGenres.length; i++) {
+				for (var j = 0; j < noGenres.length; j++) {
+					if (yesGenres[i].name === noGenres[j].name) {
+						alert("No puedes seleccionar el mismo género en 'Sí' y 'No'.");
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+	</script>
 </head>
 <style type="text/css">
 	*{
@@ -71,7 +88,7 @@
 </style>
 <body>
 	<h1>MooodMoovies - El recomendador de películas que necesitas</h1>
-	<form action="http://localhost:8080/" method="post">
+	<form action="http://localhost:8080/" onsubmit="return checkGenres();" method="post">
 
 		<!-- Selector de moods-->
 		<p>¿Cuál es tu mood hoy?</p>

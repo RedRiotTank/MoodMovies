@@ -67,7 +67,8 @@ public class Recomendator {
             if(discard.contains(tagtostring(genre)))
                 discard.remove(tagtostring(genre));
 
-            search_by.add(tagtostring(genre));
+            if(!search_by.contains(tagtostring(genre)))
+                search_by.add(tagtostring(genre));
 
         }
 
@@ -76,7 +77,8 @@ public class Recomendator {
             if(search_by.contains(tagtostring(genre)))
                 search_by.remove(tagtostring(genre));
 
-            discard.add(tagtostring(genre));
+            if(!discard.contains(tagtostring(genre)))
+                discard.add(tagtostring(genre));
 
         }
     }
