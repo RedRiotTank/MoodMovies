@@ -130,7 +130,8 @@ public class MovieLoader {
                 String title = movieNode.get("title").asText();
                 String year = movieNode.get("release_date").asText().substring(0, 4);
                 double popularity = movieNode.get("popularity").asDouble();
-                double score = scrapRating(title);
+                double score = 0.0;
+                // DESCOMENTAR CUANDO FUNCIONE: scrapRating(title);
 
                 scrapIMG(title,String.valueOf(id));
 
@@ -254,6 +255,11 @@ public class MovieLoader {
 
         return Double.parseDouble(ratingValue);
 
+    }
+
+    // Se obtiene el numero de peliculas obtenidas de la bd con los generos de la lista <generos>
+    public int getNumMoviesRecommended(ArrayList<String> generos) throws SQLException {
+        return db.getNumMovies(generos);
     }
 
 }

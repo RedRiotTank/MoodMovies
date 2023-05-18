@@ -18,6 +18,79 @@ public class DataBase extends Connector {
     private ResultSet resultSet;
     private boolean hasResultSet;
 
+    // se obtiene el nombre de un tag segun su id
+    private static String stringToTag(String str) {
+        String result = null;
+        switch (str) {
+            case "12" -> result = Tag.ADVENTURE.name().toUpperCase();
+            case "14" -> result = Tag.FANTASY.name().toUpperCase();
+            case "16" -> result = Tag.ANIMATION.name().toUpperCase();
+            case "18" -> result = Tag.DRAMA.name().toUpperCase();
+            case "27" -> result = Tag.HORROR.name().toUpperCase();
+            case "28" -> result = Tag.ACTION.name().toUpperCase();
+            case "35" -> result = Tag.COMEDY.name().toUpperCase();
+            case "36" -> result = Tag.HISTORY.name().toUpperCase();
+            case "37" -> result = Tag.WESTERN.name().toUpperCase();
+            case "53" -> result = Tag.THRILLER.name().toUpperCase();
+            case "80" -> result = Tag.CRIME.name().toUpperCase();
+            case "9648" -> result = Tag.MYSTERY.name().toUpperCase();
+            case "10749" -> result = Tag.ROMANCE.name().toUpperCase();
+            case "878" -> result = Tag.SCIENCE_FICTION.name().toUpperCase();
+        }
+        return result;
+    }
+
+    // obtiene el numero de peliculas con los generos de la lista <generos>
+    public int getNumMovies(ArrayList<String> generos) throws SQLException {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT COUNT(*) AS total_movies FROM Movies movies ")
+                .append("JOIN Movies_Genres movies_genres ON movies.id = movies_genres.movie_id ")
+                .append("JOIN Genres genres ON movies_genres.genre_id = genres.id ");
+
+        // Construir cláusula WHERE con parámetros individuales
+        if (!generos.isEmpty()) {
+            queryBuilder.append("WHERE genres.name IN (");
+            for (int i = 0; i < generos.size(); i++) {
+                queryBuilder.append("?");
+                if (i < generos.size() - 1) {
+                    queryBuilder.append(", ");
+                }
+            }
+            queryBuilder.append(")");
+        }
+
+        String query = queryBuilder.toString();
+        PreparedStatement psmt = conn.prepareStatement(query);
+
+        // Establecer los parámetros individuales
+        for (int i = 0; i < generos.size(); i++) {
+            psmt.setString(i + 1, stringToTag(generos.get(i)));
+        }
+
+        ResultSet rs = psmt.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt("total_movies");
+        }
+
+        return 0;
+    }
+
+    private static String convertirArrayListAString(ArrayList<String> arrayList) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            String elemento = stringToTag(arrayList.get(i));
+            sb.append("'").append(elemento).append("'");
+
+            if (i != arrayList.size() - 1) {
+                sb.append(", ");
+            }
+        }
+
+        return sb.toString();
+    }
+
     public void insertMovieGenre(int movieId, int genreId) {
         // Insertar la tupla en la tabla Movies_Genres
         String insertQuery = "INSERT INTO Movies_Genres (movie_id, genre_id) VALUES (?, ?)";

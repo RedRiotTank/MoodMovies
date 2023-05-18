@@ -1,11 +1,13 @@
 package backend;
 
+import Data.DataBase;
 import Data.MovieLoader;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Recomendator {
 
@@ -150,8 +152,11 @@ public class Recomendator {
 
     public ArrayList<Movie> makeList(MovieLoader mvloader) throws SQLException, UnsupportedEncodingException, URISyntaxException {
         mvloader.discoverMoviesWith(popularity, 1, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
-        mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
+        //mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
 
+        int movies_found = mvloader.getNumMoviesRecommended(combinarArrayLists(this.search_by, this.discard));
+
+        System.out.println(movies_found);
         /*consulta SQL
 
             Si obtengo + de n resultados, creamos el array de películas con ellas y lo devolvemos.
@@ -161,6 +166,20 @@ public class Recomendator {
 
 
         return null;
+    }
+    // combina los dos arrays, descartando los elementos del primero que estén en el segundo
+    private static ArrayList<String> combinarArrayLists(ArrayList<String> arrayList1, ArrayList<String> arrayList2) {
+        HashSet<String> elementosExcluidos = new HashSet<>(arrayList2);
+
+        ArrayList<String> resultado = new ArrayList<>();
+
+        for (String elemento : arrayList1) {
+            if (!elementosExcluidos.contains(elemento)) {
+                resultado.add(elemento);
+            }
+        }
+
+        return resultado;
     }
 
 }
