@@ -130,7 +130,7 @@ public class MovieLoader {
                 String title = movieNode.get("title").asText();
                 String year = movieNode.get("release_date").asText().substring(0, 4);
                 double popularity = movieNode.get("popularity").asDouble();
-                double score = 0.0;
+                double score = scrapRating(title);
 
                 scrapIMG(title,String.valueOf(id));
 
@@ -227,10 +227,10 @@ public class MovieLoader {
 
 
 
-    public static void scrapRating(String tituloPelicula){
+    public static double scrapRating(String tituloPelicula){
         String tituloPeliculaCambiado = tituloPelicula.replace(" ", "_");
         String url = "https://www.rottentomatoes.com/m/" + tituloPeliculaCambiado;
-        String valoracion = "";
+        String ratingValue = " ";
 
         try {
             Document document = Jsoup.connect(url).get();
@@ -242,7 +242,7 @@ public class MovieLoader {
             Matcher matcher = pattern.matcher(entrada);
 
             if (matcher.find()) {
-                String ratingValue = matcher.group(1);
+                ratingValue = matcher.group(1);
                 System.out.println(ratingValue);
             } else {
                 System.out.println("No se encontró ninguna coincidencia.");
@@ -252,6 +252,7 @@ public class MovieLoader {
             e.printStackTrace();
         }
 
+        return Double.parseDouble(ratingValue);
 
     }
 
