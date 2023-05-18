@@ -13,6 +13,7 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,7 @@ public class MovieLoader {
                 double popularity = movieNode.get("popularity").asDouble();
                 double score = 0.0;
 
-                scrapIMG(title);
+                scrapIMG(title,String.valueOf(id));
 
                 String[] genres = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
 
@@ -144,7 +145,7 @@ public class MovieLoader {
 
 
 
-    public static void scrapIMG(String title) {
+    public static void scrapIMG(String title, String id) {
         title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
         String fileName = title + ".jpg";
         String filePath = "images/" + fileName;
@@ -175,8 +176,30 @@ public class MovieLoader {
             Path targetPath = Paths.get("images", fileName);
             Files.copy(urlObject.openStream(), targetPath);
         } catch (IOException e) {
-            // Manejar la excepción de conexión o descarga de imagen aquí
-            System.out.println("No se pudo conectar o descargar la imagen: " + e.getMessage());
+            try {
+                // Establecer la URL de la página web que se va a analizar
+                String url = "https://www.themoviedb.org/movie/";
+                url = url + id;
+
+                // Conectar con la página web y descargar el código fuente HTML
+                Document document = Jsoup.connect(url).get();
+
+                // Buscar la imagen con la clase "summary_img" en el código fuente HTML
+                Element element = document.selectFirst("img.poster");
+                // Obtener la URL de la imagen
+                String imageUrl = element.attr("data-src");
+                imageUrl = "https://www.themoviedb.org/"+imageUrl;
+                // Descargar la imagen y guardarla en el directorio "images"
+                URL urlObject = new URL(imageUrl);
+                Path targetPath = Paths.get("images", fileName);
+                Files.copy(urlObject.openStream(), targetPath);
+            } catch (IOException exception) {
+                // Manejar la excepción de conexión o descarga de imagen aquí
+                System.out.println("No se pudo realizar el web scraping: " + exception.getMessage());
+            }
+
+
+            System.out.println("No se pudo conectar o descargar la imagen de metacritic: " + e.getMessage());
         }
     }
 
