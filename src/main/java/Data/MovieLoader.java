@@ -7,9 +7,7 @@ import backend.Tag;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -27,7 +25,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.jsoup.select.Elements;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,15 +73,7 @@ public class MovieLoader {
 
      * */
     // Añadir los dos arratList generados.
-    public void discoverMoviesWith(boolean popularity_mode,String first_year, String second_year, ArrayList<String> searchBy, ArrayList<String> discard) throws URISyntaxException, SQLException, UnsupportedEncodingException {
-        // datos para peliculas:
-        String movie_name = " ", movie_year = " ";
-        double movie_popularity = 0.0;
-        JSONArray genreIds = new JSONArray();
-
-        HttpClient client = HttpClient.newHttpClient();
-        String peticion = " ";
-
+    public void discoverMoviesWith(boolean popularity_mode, int page, String first_year, String second_year, ArrayList<String> searchBy, ArrayList<String> discard) throws URISyntaxException, SQLException, UnsupportedEncodingException {
         // Procesamiento de los arrays de géneros.
         String search_by_parameters = String.join("%20%7C%7C%20", searchBy);
         //String searchByParametroCodificado = URLEncoder.encode(search_by_parameters, "UTF-8");
@@ -92,19 +81,45 @@ public class MovieLoader {
         String discard_parameters = String.join("%2C", discard);
         //String discardParametroCodificado = URLEncoder.encode(discard_parameters, "UTF-8");
 
-        peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ search_by_parameters + "&without_genres="+discard_parameters;
+        // procesamiento de página aleatoria: max page = 500
 
-        HttpRequest request = HttpRequest.newBuilder(new URI(peticion))
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
+        while (!hasMovies(popularity_mode,page, first_year, second_year, search_by_parameters, discard_parameters )) {
+            System.out.println("No se encontraron películas en la página " + page + ". Buscando otra página...");
+        }
 
+        System.out.println("Se encontraron peliculas en la pagina: " + page);
+    }
+
+    private boolean hasMovies(boolean popularity_mode, int page, String first_year, String second_year, String search_by_parameters, String discard_parameters){
+        String peticion = " ";
+        boolean has_movies = false;
         try {
+            if(popularity_mode) {
+                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters;
+            } else {
+                int max;
+                int total_pages = getTotalPages(first_year,second_year,search_by_parameters,discard_parameters);
+
+                if(total_pages > 500){
+                   max = 500;
+                } else {
+                    max = total_pages;
+                }
+
+                page = (int)(Math.random()*max+1);
+                peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ search_by_parameters + "&without_genres="+discard_parameters;
+            }
+
             // Obtener el JSON desde el enlace
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(new URL(peticion));
 
+            int totalPages = rootNode.get("total_pages").asInt();
+
+            if(rootNode.has("results")){
+                JsonNode results = rootNode.get("results");
+                has_movies =  results.size() > 0;
+            }
             // Obtener el array de resultados
             JsonNode resultsNode = rootNode.get("results");
 
@@ -129,12 +144,19 @@ public class MovieLoader {
                     db.insertMovieGenre(id,Integer.parseInt(genres[i]));
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             //e.printStackTrace();
         }
+        return has_movies;
     }
 
+    public int  getTotalPages(String first_year, String second_year, String search_by_parameters, String discard_parameters) throws IOException {
+        String peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters;
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(new URL(peticion));
 
+        return rootNode.get("total_pages").asInt();
+    }
 
     public void getMovieInfoAPI(String id){
 
