@@ -31,6 +31,8 @@ public class Connector {
             if(conn != null && !conn.isClosed()){
                 conn.close();
                 System.out.println("Desconexión exitosa de la bd");
+            } else{
+                System.out.println("Ya está desconectada");
             }
         } catch (SQLException e){
             System.out.println(e);

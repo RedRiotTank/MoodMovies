@@ -5,19 +5,30 @@ import java.util.ArrayList;
 public class Movie {
 
     private String name;
-    private int score;
+    private String score;
     private int year;
     private String director;
     private int id;
+    private double popularity;
 
     private ArrayList<Tag> genres;
 
+    public Movie(){
+        this.id = 0;
+        this.score = "";
+        this.director = "";
+        this.name = "";
+        this.year = 0;
+        this.popularity = 0.0;
+        genres = new ArrayList<>();
+    }
 
-    public Movie(int id, String name, int score, int year, String director){
+    public Movie(int id, String name, String score, int year, double popularity, String director){
         this.id = id;
         this.name = name;
         this.score = score;
         this.year = year;
+        this.popularity = popularity;
         this.director = director;
         this.genres = new ArrayList<>();
     }
@@ -30,11 +41,11 @@ public class Movie {
         this.name = name;
     }
 
-    public int getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         this.score = score;
     }
 
@@ -68,5 +79,15 @@ public class Movie {
 
     public void setGenres(ArrayList<Tag> genres) {
         this.genres = genres;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "name='" + name + '\'' +
+                ", score='" + score + '\'' +
+                ", year=" + year +
+                ", popularity=" + popularity +
+                '}';
     }
 }
