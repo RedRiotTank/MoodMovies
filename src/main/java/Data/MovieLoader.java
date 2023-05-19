@@ -130,7 +130,7 @@ public class MovieLoader {
                 String title = movieNode.get("title").asText();
                 String year = movieNode.get("release_date").asText().substring(0, 4);
                 double popularity = movieNode.get("popularity").asDouble();
-                String score = scrapRating(title);
+                String score = scrapRating(title,id);
                 // DESCOMENTAR CUANDO FUNCIONE: scrapRating(title);
 
                 scrapIMG(title,String.valueOf(id));
@@ -200,7 +200,7 @@ public class MovieLoader {
         }
     }
 
-    public static String scrapRating(String tituloPelicula){
+    public static String scrapRating(String tituloPelicula, int id){
         String tituloPeliculaCambiado = tituloPelicula.replaceAll("[:,¿?'?]", "");
 
         // Reemplazar espacios por guiones
@@ -218,13 +218,32 @@ public class MovieLoader {
             Element element = document.selectFirst("span.metascore_w");
 
             if (true) {
-
+                String result = element.text();
+                return result;
             } else {
                 ratingValue = "NF";
                 System.out.println("ScrapRating: se conecto a la página, no se encontro rating");
             }
 
         } catch (IOException e) {
+            String urlTMD = "https://www.themoviedb.org/movie/" + id;
+            try {
+                // Conectar con la página web y descargar el código fuente HTML
+                Document document = Jsoup.connect(urlTMD).get();
+                // Buscar la ecore en el código fuente HTML
+                Element element = document.selectFirst("div.user_score_chart");
+
+                if (true) {
+                    System.out.println("tees");
+                } else {
+                    ratingValue = "NF";
+                    System.out.println("ScrapRating: se conecto a la página, no se encontro rating");
+                }
+
+            } catch (IOException exception) {
+                System.out.println("A");
+            }
+
             ratingValue = "NF";
             System.out.println("ERROR: no se encontro la página scrapRating, se introdujo NF");
             return ratingValue;
