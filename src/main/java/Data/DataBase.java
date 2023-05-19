@@ -109,7 +109,7 @@ public class DataBase extends Connector {
 
 
 
-    public void insertMovie(int id, String title, String year, double popularity, double score) throws SQLException {
+    public void insertMovie(int id, String title, String year, double popularity, String score) throws SQLException {
         // Verificar si la ID ya existe en la base de datos
         String checkQuery = "SELECT COUNT(*) FROM Movies WHERE id = ?";
         try (PreparedStatement checkStatement = conn.prepareStatement(checkQuery)) {
@@ -131,7 +131,7 @@ public class DataBase extends Connector {
             statement.setString(2, title);
             statement.setString(3, year);
             statement.setDouble(4, popularity);
-            statement.setDouble(5, score);
+            statement.setString(5, score);
 
             statement.executeUpdate();
         }

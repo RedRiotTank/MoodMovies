@@ -130,7 +130,7 @@ public class MovieLoader {
                 String title = movieNode.get("title").asText();
                 String year = movieNode.get("release_date").asText().substring(0, 4);
                 double popularity = movieNode.get("popularity").asDouble();
-                double score = 0.0;
+                String score = scrapRating(title);
                 // DESCOMENTAR CUANDO FUNCIONE: scrapRating(title);
 
                 scrapIMG(title,String.valueOf(id));
@@ -166,94 +166,71 @@ public class MovieLoader {
 
     }
 
-
-
     public static void scrapIMG(String title, String id) {
         title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
         String fileName = title + ".jpg";
         String filePath = "images/" + fileName;
 
-        // Verificar si el archivo ya existe
         File file = new File(filePath);
         if (file.exists()) {
-            System.out.println("La imagen ya existe. No se ejecutará el scrapping.");
-            return; // Salir del método
+            System.out.println("The image already exist, we're not scraping the image.");
+            return;
         }
 
         try {
             // Establecer la URL de la página web que se va a analizar
-            String url = "https://www.metacritic.com/movie/";
-            url = url + title;
+            String url = "https://www.themoviedb.org/movie/";
+            url = url + id;
 
             // Conectar con la página web y descargar el código fuente HTML
             Document document = Jsoup.connect(url).get();
-
             // Buscar la imagen con la clase "summary_img" en el código fuente HTML
-            Element element = document.selectFirst("img.summary_img");
-
+            Element element = document.selectFirst("img.poster");
             // Obtener la URL de la imagen
-            String imageUrl = element.attr("src");
-
+            String imageUrl = element.attr("data-src");
+            imageUrl = "https://www.themoviedb.org/" + imageUrl;
             // Descargar la imagen y guardarla en el directorio "images"
             URL urlObject = new URL(imageUrl);
             Path targetPath = Paths.get("images", fileName);
             Files.copy(urlObject.openStream(), targetPath);
-        } catch (IOException e) {
-            try {
-                // Establecer la URL de la página web que se va a analizar
-                String url = "https://www.themoviedb.org/movie/";
-                url = url + id;
-
-                // Conectar con la página web y descargar el código fuente HTML
-                Document document = Jsoup.connect(url).get();
-
-                // Buscar la imagen con la clase "summary_img" en el código fuente HTML
-                Element element = document.selectFirst("img.poster");
-                // Obtener la URL de la imagen
-                String imageUrl = element.attr("data-src");
-                imageUrl = "https://www.themoviedb.org/"+imageUrl;
-                // Descargar la imagen y guardarla en el directorio "images"
-                URL urlObject = new URL(imageUrl);
-                Path targetPath = Paths.get("images", fileName);
-                Files.copy(urlObject.openStream(), targetPath);
-            } catch (IOException exception) {
-                // Manejar la excepción de conexión o descarga de imagen aquí
-                System.out.println("No se pudo realizar el web scraping: " + exception.getMessage());
-            }
+        } catch (IOException exception) {
+            System.out.println("ERROR: No se pudo realizar el web scraping: " + exception.getMessage());
 
 
-            System.out.println("No se pudo conectar o descargar la imagen de metacritic: " + e.getMessage());
         }
     }
 
+    public static String scrapRating(String tituloPelicula){
+        String tituloPeliculaCambiado = tituloPelicula.replaceAll("[:,¿?'?]", "");
 
+        // Reemplazar espacios por guiones
+        tituloPeliculaCambiado = tituloPeliculaCambiado.replaceAll(" ", "-");
 
-    public static double scrapRating(String tituloPelicula){
-        String tituloPeliculaCambiado = tituloPelicula.replace(" ", "_");
-        String url = "https://www.rottentomatoes.com/m/" + tituloPeliculaCambiado;
+        // Convertir a minúsculas
+        tituloPeliculaCambiado = tituloPeliculaCambiado.toLowerCase();
+        String url = "https://www.metacritic.com/movie/" + tituloPeliculaCambiado;
         String ratingValue = " ";
 
         try {
+            // Conectar con la página web y descargar el código fuente HTML
             Document document = Jsoup.connect(url).get();
-            String entrada = document.toString();
+            // Buscar la ecore en el código fuente HTML
+            Element element = document.selectFirst("span.metascore_w");
 
-            String regex = "ratingValue\":\"(\\d+)\"";
+            if (true) {
 
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(entrada);
-
-            if (matcher.find()) {
-                ratingValue = matcher.group(1);
-                System.out.println(ratingValue);
             } else {
-                System.out.println("No se encontró ninguna coincidencia.");
+                ratingValue = "NF";
+                System.out.println("ScrapRating: se conecto a la página, no se encontro rating");
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            ratingValue = "NF";
+            System.out.println("ERROR: no se encontro la página scrapRating, se introdujo NF");
+            return ratingValue;
         }
 
-        return Double.parseDouble(ratingValue);
+        return ratingValue;
 
     }
 
