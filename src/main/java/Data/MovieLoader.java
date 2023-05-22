@@ -174,7 +174,7 @@ public class MovieLoader {
 
     public static void scrapIMG(String title, String id) {
         title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
-        String fileName = title + ".jpg";
+        String fileName = id + ".jpg";
         String filePath = "images/" + fileName;
 
         File file = new File(filePath);
@@ -223,8 +223,12 @@ public class MovieLoader {
             // Buscar la ecore en el código fuente HTML
             Element element = document.selectFirst("span.metascore_w");
 
+
             if (true) {
                 String result = element.text();
+                if(result.equals("tbd")){
+                    throw new IOException();
+                }
                 return result;
             } else {
                 ratingValue = "NF";
@@ -238,13 +242,14 @@ public class MovieLoader {
                 Document document = Jsoup.connect(urlTMD).get();
                 // Buscar la ecore en el código fuente HTML
                 Element element = document.selectFirst("div.user_score_chart");
+                String score = element.attr("data-percent");
+                int puntoIndex = score.indexOf(".");
 
-                if (true) {
-                    System.out.println("tees");
-                } else {
-                    ratingValue = "NF";
-                    System.out.println("ScrapRating: se conecto a la página, no se encontro rating");
+                if (puntoIndex != -1) {
+                    score =  score.substring(0, puntoIndex);
                 }
+
+                return score;
 
             } catch (IOException exception) {
                 System.out.println("A");

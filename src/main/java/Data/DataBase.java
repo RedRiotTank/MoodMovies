@@ -118,7 +118,7 @@ public class DataBase extends Connector {
                 if(popularity_order){
                     sqlBuilder.append("ORDER BY m.popularity DESC");
                 }
-                //sqlBuilder.append(" LIMIT 40");
+                sqlBuilder.append(" LIMIT 40");
             }
 
             // Crear el objeto PreparedStatement
