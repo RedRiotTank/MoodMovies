@@ -61,14 +61,13 @@ public class DataBase extends Connector {
         }
 
         String query = queryBuilder.toString();
-        System.out.println(query);
         PreparedStatement psmt = conn.prepareStatement(query);
 
         // Establecer los parámetros individuales
         for (int i = 0; i < generos.size(); i++) {
             psmt.setString(i + 1, stringToTag(generos.get(i)));
         }
-        System.out.println(psmt.toString());
+
         ResultSet rs = psmt.executeQuery();
 
         if (rs.next()) {
@@ -135,7 +134,7 @@ public class DataBase extends Connector {
                 pstmt.setString(paramIndex + i, stringToTag(discard.get(i)));
             }
 
-            System.out.println(sqlBuilder);
+            //System.out.println(sqlBuilder);
             // Ejecutar la consulta
             ResultSet rs = pstmt.executeQuery();
 
@@ -190,7 +189,7 @@ public class DataBase extends Connector {
             }
             System.out.println("La tupla ha sido insertada en la tabla Movies_Genres.");
         } catch (SQLException e) {
-            System.out.println("No se pudo insertar la tupla en la tabla Movies_Genres: " + e.getMessage());
+            System.out.println("-----No se pudo insertar la tupla en la tabla Movies_Genres: " + e.getMessage() + "-----");
         }
     }
 
@@ -205,7 +204,7 @@ public class DataBase extends Connector {
                 resultSet.next();
                 int count = resultSet.getInt(1);
                 if (count > 0) {
-                    System.out.println("La ID ya existe en la base de datos. No se insertará la tupla.");
+                    System.out.println("-----La ID ya existe en la base de datos. No se insertará la tupla.-----");
                     return; // Salir del método
                 }
             }
@@ -221,7 +220,7 @@ public class DataBase extends Connector {
             statement.setString(5, score);
 
             statement.executeUpdate();
-            System.out.println("Se ha insertado la pelicula" + title);
+            System.out.println("----Se ha insertado la pelicula " + title + "------");
         } catch (SQLException e){
             e.printStackTrace();
         }
