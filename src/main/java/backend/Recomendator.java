@@ -151,21 +151,30 @@ public class Recomendator {
     }
 
     public ArrayList<Movie> makeList(MovieLoader mvloader) throws SQLException, UnsupportedEncodingException, URISyntaxException {
-        mvloader.discoverMoviesWith(popularity, 1, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
-        //mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
+        int movies_search_by = 0, movies_to_discard = 0, total_movies = 0;
+        ArrayList<Movie> recommended_list = new ArrayList<>();
+        Movie aux_movie = new Movie();
 
-        int movies_found = mvloader.getNumMoviesRecommended(combinarArrayLists(this.search_by, this.discard));
+        movies_search_by = mvloader.getNumMoviesRecommended(this.search_by);
 
-        System.out.println(movies_found);
-        /*consulta SQL
+        movies_to_discard = mvloader.getNumMoviesRecommended(this.discard);
 
-            Si obtengo + de n resultados, creamos el array de películas con ellas y lo devolvemos.
-            Si obtengo - de n resulsultados hacemos una solicitud a la API que busque peliculas con determinados géneros y sin determinados géneros.
-         */
+        total_movies = movies_search_by - movies_to_discard;
 
+        System.out.println("Hay un total de " + total_movies + " peliculas en la bd");
 
+        // si no hay suficientes peliculas en bd, se buscan
+        if(total_movies < 20){
+            // discover()
+            System.out.println("Buscando peliculas en nuestras fuentes de datos");
+            mvloader.discoverMoviesWith(popularity, 1, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
+            mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
+        }
+        System.out.println("Se ha procesado la busqueda de peliculas");
+        // se devuelve la lista de recomendación
+        recommended_list = mvloader.getRecommendedList(this.search_by, this.discard, this.popularity);
 
-        return null;
+        return recommended_list;
     }
     // combina los dos arrays, descartando los elementos del primero que estén en el segundo
     private static ArrayList<String> combinarArrayLists(ArrayList<String> arrayList1, ArrayList<String> arrayList2) {

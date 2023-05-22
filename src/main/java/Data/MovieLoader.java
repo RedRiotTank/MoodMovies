@@ -3,6 +3,7 @@ package Data;
 
 
 import backend.Mood;
+import backend.Movie;
 import backend.Tag;
 import java.io.File;
 import java.io.IOException;
@@ -38,12 +39,16 @@ public class MovieLoader {
 
     DataBase db = null;
 
-    public MovieLoader(DataBase db){
+    public MovieLoader(DataBase db) {
         this.db = db;
     }
 
+    public DataBase getDb() {
+        return db;
+    }
 
     private static String API_KEY = "api_key=e37359bf96dd4a19ed90f8d427112595";
+
     /* DOCUMENTACION API (método discover)
     --------------------------------------------------------------
      * language: indica en que idioma queremos que salga el json
@@ -83,31 +88,31 @@ public class MovieLoader {
 
         // procesamiento de página aleatoria: max page = 500
 
-        while (!hasMovies(popularity_mode,page, first_year, second_year, search_by_parameters, discard_parameters )) {
+        while (!hasMovies(popularity_mode, page, first_year, second_year, search_by_parameters, discard_parameters)) {
             System.out.println("No se encontraron películas en la página " + page + ". Buscando otra página...");
         }
 
         System.out.println("Se encontraron peliculas en la pagina: " + page);
     }
 
-    private boolean hasMovies(boolean popularity_mode, int page, String first_year, String second_year, String search_by_parameters, String discard_parameters){
+    private boolean hasMovies(boolean popularity_mode, int page, String first_year, String second_year, String search_by_parameters, String discard_parameters) {
         String peticion = " ";
         boolean has_movies = false;
         try {
-            if(popularity_mode) {
-                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters;
+            if (popularity_mode) {
+                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + page + "&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters;
             } else {
                 int max;
-                int total_pages = getTotalPages(first_year,second_year,search_by_parameters,discard_parameters);
+                int total_pages = getTotalPages(first_year, second_year, search_by_parameters, discard_parameters);
 
-                if(total_pages > 500){
-                   max = 500;
+                if (total_pages > 500) {
+                    max = 500;
                 } else {
                     max = total_pages;
                 }
 
-                page = (int)(Math.random()*max+1);
-                peticion = "https://api.themoviedb.org/3/discover/movie?"+API_KEY+"&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&primary_release_date.gte="+first_year+"&primary_release_date.lte="+second_year+"&with_watch_monetization_types=flatrate&with_genres="+ search_by_parameters + "&without_genres="+discard_parameters;
+                page = (int) (Math.random() * max + 1);
+                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + page + "&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters;
             }
 
             // Obtener el JSON desde el enlace
@@ -116,9 +121,9 @@ public class MovieLoader {
 
             int totalPages = rootNode.get("total_pages").asInt();
 
-            if(rootNode.has("results")){
+            if (rootNode.has("results")) {
                 JsonNode results = rootNode.get("results");
-                has_movies =  results.size() > 0;
+                has_movies = results.size() > 0;
             }
             // Obtener el array de resultados
             JsonNode resultsNode = rootNode.get("results");
@@ -133,25 +138,24 @@ public class MovieLoader {
                 String score = scrapRating(title,id);
                 // DESCOMENTAR CUANDO FUNCIONE: scrapRating(title);
 
-                scrapIMG(title,String.valueOf(id));
+                scrapIMG(title, String.valueOf(id));
 
                 String[] genres = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
 
-
                 // insercion
-                db.insertMovie(id,title,year,popularity,score);
+                db.insertMovie(id, title, year, popularity, score);
 
-                for(int i=0; i<genres.length; i++){
-                    db.insertMovieGenre(id,Integer.parseInt(genres[i]));
+                for (int i = 0; i < genres.length; i++) {
+                    db.insertMovieGenre(id, Integer.parseInt(genres[i]));
                 }
             }
         } catch (IOException | SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return has_movies;
     }
 
-    public int  getTotalPages(String first_year, String second_year, String search_by_parameters, String discard_parameters) throws IOException {
+    public int getTotalPages(String first_year, String second_year, String search_by_parameters, String discard_parameters) throws IOException {
         String peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters;
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(new URL(peticion));
@@ -159,12 +163,14 @@ public class MovieLoader {
         return rootNode.get("total_pages").asInt();
     }
 
-    public void getMovieInfoAPI(String id){
+    public void getMovieInfoAPI(String id) {
 
     }
-    public void loadMoviesScrap(){
+
+    public void loadMoviesScrap() {
 
     }
+
 
     public static void scrapIMG(String title, String id) {
         title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
@@ -185,9 +191,9 @@ public class MovieLoader {
             // Conectar con la página web y descargar el código fuente HTML
             Document document = Jsoup.connect(url).get();
             // Buscar la imagen con la clase "summary_img" en el código fuente HTML
-            Element element = document.selectFirst("img.poster");
+            Element element = document.selectFirst("img.poster"); // NULL POINTER
             // Obtener la URL de la imagen
-            String imageUrl = element.attr("data-src");
+            String imageUrl = element.attr("data-src"); // NULL POINTER
             imageUrl = "https://www.themoviedb.org/" + imageUrl;
             // Descargar la imagen y guardarla en el directorio "images"
             URL urlObject = new URL(imageUrl);
@@ -258,4 +264,97 @@ public class MovieLoader {
         return db.getNumMovies(generos);
     }
 
+    public ArrayList<Movie> getRecommendedList(ArrayList<String> search_by, ArrayList<String> discard, boolean popularity_order) {
+
+        return db.getDataBaseRecommendedList(search_by, discard, popularity_order);
+    }
+
 }
+/*
+        // Método para construir la lista de películas
+        public ArrayList<Movie> buildMovieList(List<String> includedGenres, List<String> excludedGenres) {
+            ArrayList<Movie> movieList = new ArrayList<>();
+
+            try {
+                // Establecer conexión con la base de datos
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/nombre_base_de_datos", "usuario", "contraseña");
+
+                // Crear la consulta SQL dinámicamente
+                StringBuilder sqlBuilder = new StringBuilder();
+                sqlBuilder.append("SELECT m.id, m.title, m.year, m.popularity, m.score ")
+                        .append("FROM Movies AS m ")
+                        .append("INNER JOIN Movies_Genres AS mg ON m.id = mg.movie_id ")
+                        .append("INNER JOIN Genres AS g ON mg.genre_id = g.id ")
+                        .append("WHERE g.name IN (");
+
+                // Agregar los géneros incluidos a la consulta
+                for (int i = 0; i < includedGenres.size(); i++) {
+                    sqlBuilder.append("?");
+                    if (i < includedGenres.size() - 1) {
+                        sqlBuilder.append(", ");
+                    }
+                }
+                sqlBuilder.append(") ");
+
+                // Agregar los géneros excluidos a la consulta
+                if (!excludedGenres.isEmpty()) {
+                    sqlBuilder.append("AND m.id NOT IN (")
+                            .append("SELECT DISTINCT m2.id ")
+                            .append("FROM peliculas AS m2 ")
+                            .append("INNER JOIN Movies_Genres AS mg2 ON m2.id = mg2.movie_id ")
+                            .append("INNER JOIN generos AS g2 ON mg2.genre_id = g2.id ")
+                            .append("WHERE g2.name IN (");
+                    for (int i = 0; i < excludedGenres.size(); i++) {
+                        sqlBuilder.append("?");
+                        if (i < excludedGenres.size() - 1) {
+                            sqlBuilder.append(", ");
+                        }
+                    }
+                    sqlBuilder.append("))");
+                }
+
+                // Crear el objeto PreparedStatement
+                PreparedStatement pstmt = conn.prepareStatement(sqlBuilder.toString());
+
+                // Establecer los valores de los parámetros de los géneros incluidos
+                for (int i = 0; i < includedGenres.size(); i++) {
+                    pstmt.setString(i + 1, includedGenres.get(i));
+                }
+
+                // Establecer los valores de los parámetros de los géneros excluidos
+                int paramIndex = includedGenres.size() + 1;
+                for (int i = 0; i < excludedGenres.size(); i++) {
+                    pstmt.setString(paramIndex + i, excludedGenres.get(i));
+                }
+
+                // Ejecutar la consulta
+                ResultSet rs = pstmt.executeQuery();
+
+                // Iterar sobre los resultados y construir las instancias de Movie
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    int year = rs.getInt("year");
+                    int popularity = rs.getInt("popularity");
+                    int score = rs.getInt("score");
+
+                    // Crear una instancia de Movie y agregarla a la lista
+                    Movie movie = new Movie(title, score, year, "", id, new ArrayList<>());
+                    movieList.add(movie);
+                }
+
+                // Cerrar la conexión y liberar recursos
+                rs.close();
+                pstmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return movieList;
+        }
+    }
+
+}
+*/
+

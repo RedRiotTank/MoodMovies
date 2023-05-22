@@ -21,21 +21,21 @@ public class Main {
 
         System.out.println("Iniciando Sistema de control MoodMovies:");
 
-        DataBase database = new DataBase();
-        MovieLoader mvloader = new MovieLoader(database);
+        DataBase database = null;
+        MovieLoader mvloader = null;
 
         while(true){
+            database = new DataBase();
+            mvloader = new MovieLoader(database);
             HTTPsocket http_request = new HTTPsocket();
 
             Recomendator recomendation = http_request.loadRecomedationInfo(mvloader);
 
             ArrayList<Movie> movieList = recomendation.makeList(mvloader);
 
-            /*Procesamiento de la lista de peliculas a código HTML*/
 
-            http_request.httpOUT();
-
-
+            http_request.httpOUT(movieList);
+            mvloader.getDb().disconnect();
         }
 
     }

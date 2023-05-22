@@ -1,6 +1,7 @@
 package main;
 
 import Data.MovieLoader;
+import backend.Movie;
 import backend.Recomendator;
 
 import java.io.BufferedReader;
@@ -215,7 +216,7 @@ public class HTTPsocket {
 
         return new Recomendator(mood,min_year,max_year, stream_plataforms,yes_genres,no_genres,popularity, mvloader);
     }
-
+    /*
     public void httpOUT() throws IOException {
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
         out.println("HTTP/1.1 200 OK");
@@ -225,6 +226,28 @@ public class HTTPsocket {
         out.close();
         clientSocket.close();
     }
+     */
+    public void httpOUT(ArrayList<Movie> movies) throws IOException {
+        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+        out.println("HTTP/1.1 200 OK");
+        out.println("Content-Type: text/html");
+        out.println("");
+        out.println("<html><meta charset=\"UTF-8\"><body>");
+        out.println("<h1>Películas: " + movies.size() + "</h1>");
 
+        // Generar contenido dinámico con las películas
+        for (Movie movie : movies) {
+            out.println("<h2>" + movie.getName() + "</h2>");
+            out.println("<p>Año: " + movie.getYear() + "</p>");
+            out.println("<p>Director: " + movie.getDirector() + "</p>");
+            out.println("<p>Puntuación: " + movie.getScore() + "</p>");
+            //out.println("<img src='" + movie.getImageUrl() + "' alt='Imagen de la película'>");
+            out.println("<hr>");
+        }
+
+        out.println("</body></html>");
+        out.close();
+        clientSocket.close();
+    }
 
 }

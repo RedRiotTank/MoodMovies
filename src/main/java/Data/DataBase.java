@@ -2,6 +2,7 @@ package Data;
 
 import backend.Movie;
 import backend.Tag;
+import net.officefloor.compile.section.SectionOutputType;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -40,7 +41,7 @@ public class DataBase extends Connector {
         return result;
     }
 
-    // obtiene el numero de peliculas con los generos de la lista <generos>
+    // obtiene el número de peliculas con los generos de la lista <generos>
     public int getNumMovies(ArrayList<String> generos) throws SQLException {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("SELECT COUNT(*) AS total_movies FROM Movies movies ")
@@ -60,13 +61,14 @@ public class DataBase extends Connector {
         }
 
         String query = queryBuilder.toString();
+        System.out.println(query);
         PreparedStatement psmt = conn.prepareStatement(query);
 
         // Establecer los parámetros individuales
         for (int i = 0; i < generos.size(); i++) {
             psmt.setString(i + 1, stringToTag(generos.get(i)));
         }
-
+        System.out.println(psmt.toString());
         ResultSet rs = psmt.executeQuery();
 
         if (rs.next()) {
@@ -74,6 +76,91 @@ public class DataBase extends Connector {
         }
 
         return 0;
+    }
+
+    public ArrayList<Movie> getDataBaseRecommendedList(ArrayList<String> search_by,ArrayList<String> discard, boolean popularity_order){
+        ArrayList<Movie> recommendedList = new ArrayList<>();
+
+        try {
+            // Crear la consulta SQL dinámicamente
+            StringBuilder sqlBuilder = new StringBuilder();
+            sqlBuilder.append("SELECT DISTINCT m.id, m.title, m.year, m.popularity, m.score ")
+                    .append("FROM Movies AS m ")
+                    .append("INNER JOIN Movies_Genres AS mg ON m.id = mg.movie_id ")
+                    .append("INNER JOIN Genres AS g ON mg.genre_id = g.id ")
+                    .append("WHERE g.name IN (");
+
+            // Agregar los géneros incluidos a la consulta
+            for (int i = 0; i < search_by.size(); i++) {
+                sqlBuilder.append("?");
+                if (i < search_by.size() - 1) {
+                    sqlBuilder.append(", ");
+                }
+            }
+            sqlBuilder.append(") ");
+
+            // Agregar los géneros excluidos a la consulta
+            if (!discard.isEmpty()) {
+                sqlBuilder.append("AND m.id NOT IN (")
+                        .append("SELECT DISTINCT m2.id ")
+                        .append("FROM Movies AS m2 ")
+                        .append("INNER JOIN Movies_Genres AS mg2 ON m2.id = mg2.movie_id ")
+                        .append("INNER JOIN Genres AS g2 ON mg2.genre_id = g2.id ")
+                        .append("WHERE g2.name IN (");
+                for (int i = 0; i < discard.size(); i++) {
+                    sqlBuilder.append("?");
+                    if (i < discard.size() - 1) {
+                        sqlBuilder.append(", ");
+                    }
+                }
+
+                sqlBuilder.append("))");
+                if(popularity_order){
+                    sqlBuilder.append("ORDER BY m.popularity DESC");
+                }
+                //sqlBuilder.append(" LIMIT 40");
+            }
+
+            // Crear el objeto PreparedStatement
+            PreparedStatement pstmt = conn.prepareStatement(sqlBuilder.toString());
+
+            // Establecer los valores de los parámetros de los géneros incluidos
+            for (int i = 0; i < search_by.size(); i++) {
+                pstmt.setString(i + 1, stringToTag(search_by.get(i)));
+            }
+
+            // Establecer los valores de los parámetros de los géneros excluidos
+            int paramIndex = search_by.size() + 1;
+            for (int i = 0; i < discard.size(); i++) {
+                pstmt.setString(paramIndex + i, stringToTag(discard.get(i)));
+            }
+
+            System.out.println(sqlBuilder);
+            // Ejecutar la consulta
+            ResultSet rs = pstmt.executeQuery();
+
+            // Iterar sobre los resultados y construir las instancias de Movie
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                int year = rs.getInt("year");
+                double popularity = rs.getDouble("popularity");
+                String score = rs.getString("score");
+
+                // Crear una instancia de Movie y agregarla a la lista
+                Movie movie = new Movie(id, title, score, year, popularity, "");
+                recommendedList.add(movie);
+            }
+
+            // Cerrar la conexión y liberar recursos
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return recommendedList;
     }
 
     private static String convertirArrayListAString(ArrayList<String> arrayList) {
@@ -134,6 +221,9 @@ public class DataBase extends Connector {
             statement.setString(5, score);
 
             statement.executeUpdate();
+            System.out.println("Se ha insertado la pelicula" + title);
+        } catch (SQLException e){
+            e.printStackTrace();
         }
     }
 
