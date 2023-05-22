@@ -44,7 +44,7 @@ public class DataBase extends Connector {
     // obtiene el número de peliculas con los generos de la lista <generos>
     public int getNumMovies(ArrayList<String> generos) throws SQLException {
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SELECT COUNT(*) AS total_movies FROM Movies movies ")
+        queryBuilder.append("SELECT COUNT(DISTINCT movies.id) AS total_movies FROM Movies movies ")
                 .append("JOIN Movies_Genres movies_genres ON movies.id = movies_genres.movie_id ")
                 .append("JOIN Genres genres ON movies_genres.genre_id = genres.id ");
 

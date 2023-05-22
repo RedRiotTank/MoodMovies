@@ -173,6 +173,7 @@ public class MovieLoader {
 
 
     public static void scrapIMG(String title, String id) {
+        System.out.println("proxerr: " + id);
         title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
         String fileName = id + ".jpg";
         String filePath = "images/" + fileName;
@@ -192,13 +193,26 @@ public class MovieLoader {
             Document document = Jsoup.connect(url).get();
             // Buscar la imagen con la clase "summary_img" en el código fuente HTML
             Element element = document.selectFirst("img.poster"); // NULL POINTER
-            // Obtener la URL de la imagen
-            String imageUrl = element.attr("data-src"); // NULL POINTER
-            imageUrl = "https://www.themoviedb.org/" + imageUrl;
-            // Descargar la imagen y guardarla en el directorio "images"
-            URL urlObject = new URL(imageUrl);
-            Path targetPath = Paths.get("images", fileName);
-            Files.copy(urlObject.openStream(), targetPath);
+
+            if(element == null){
+                Path sourcePath = Path.of("images/0.jpg");
+                Path targetPath = Path.of("images/" + id + ".jpg");
+
+                Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                // Obtener la URL de la imagen
+                String imageUrl = element.attr("data-src"); // NULL POINTER
+                imageUrl = "https://www.themoviedb.org/" + imageUrl;
+                // Descargar la imagen y guardarla en el directorio "images"
+                URL urlObject = new URL(imageUrl);
+                Path targetPath = Paths.get("images", fileName);
+                Files.copy(urlObject.openStream(), targetPath);
+
+            }
+
+
+
+
         } catch (IOException exception) {
             System.out.println("ERROR: No se pudo realizar el web scraping: " + exception.getMessage());
 
