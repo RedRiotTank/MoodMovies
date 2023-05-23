@@ -151,28 +151,27 @@ public class Recomendator {
     }
 
     public ArrayList<Movie> makeList(MovieLoader mvloader) throws SQLException, UnsupportedEncodingException, URISyntaxException {
-        int movies_search_by = 0, movies_to_discard = 0, total_movies = 0;
-        ArrayList<Movie> recommended_list = new ArrayList<>();
-        Movie aux_movie = new Movie();
+        int total_movies;
+        ArrayList<Movie> recommended_list;
+        //DESCARTAR DESDE
+        //movies_search_by = mvloader.getNumMoviesRecommended(this.search_by);
 
-        movies_search_by = mvloader.getNumMoviesRecommended(this.search_by);
+        //movies_to_discard = mvloader.getNumMoviesRecommended(this.discard);
+        //DESCARTAR HASTA
+        //ESTO DEBE DEVOLVER ENTERO CONSULTA IGUAL QUE FUNCIÓN getRecommendedList
+        total_movies = mvloader.getNumDataBaseMovies(this.minYear, this.maxYear,this.search_by, this.discard, this.popularity);
 
-        movies_to_discard = mvloader.getNumMoviesRecommended(this.discard);
-
-        total_movies = movies_search_by - movies_to_discard;
-
-        System.out.println("Hay un total de " + total_movies + " peliculas en la bd");
+        System.out.println("Hay un TOTAL de " + total_movies + " peliculas en la bd");
 
         // si no hay suficientes peliculas en bd, se buscan
         if(total_movies < 20){
-            // discover()
             System.out.println("Buscando peliculas en nuestras fuentes de datos");
             mvloader.discoverMoviesWith(popularity, 1, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
-            mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
+            //mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
         }
-        System.out.println("Se ha procesado la busqueda de peliculas");
+        System.out.println("Se ha procesado la busqueda de peliculas correctamente");
         // se devuelve la lista de recomendación
-        recommended_list = mvloader.getRecommendedList(this.search_by, this.discard, this.popularity);
+        recommended_list = mvloader.getRecommendedList(this.minYear, this.maxYear,this.search_by, this.discard, this.popularity);
 
         return recommended_list;
     }

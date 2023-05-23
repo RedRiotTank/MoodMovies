@@ -87,12 +87,13 @@ public class MovieLoader {
         //String discardParametroCodificado = URLEncoder.encode(discard_parameters, "UTF-8");
 
         // procesamiento de página aleatoria: max page = 500
-
-        while (!hasMovies(popularity_mode, page, first_year, second_year, search_by_parameters, discard_parameters)) {
+        boolean controlMovies = true;
+        while (!hasMovies(popularity_mode, page, first_year, second_year, search_by_parameters, discard_parameters) && controlMovies) {
             System.out.println("No se encontraron películas en la página " + page + ". Buscando otra página...");
+            controlMovies = false;
         }
 
-        System.out.println("Se encontraron peliculas en la pagina: " + page);
+        //System.out.println("Se encontraron peliculas en la pagina: " + page);
     }
 
     private boolean hasMovies(boolean popularity_mode, int page, String first_year, String second_year, String search_by_parameters, String discard_parameters) {
@@ -100,19 +101,19 @@ public class MovieLoader {
         boolean has_movies = false;
         try {
             if (popularity_mode) {
-                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + page + "&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters + "&with_runtime.gte=80&certification.lte=18&certification_country=ES";
+                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + page + "&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters + "&with_runtime.gte=80&certification.lte=16&certification_country=ES";
             } else {
                 int max;
                 int total_pages = getTotalPages(first_year, second_year, search_by_parameters, discard_parameters);
 
-                if (total_pages > 500) {
-                    max = 500;
+                if (total_pages > 198) {
+                    max = 198;
                 } else {
                     max = total_pages;
                 }
 
                 page = (int) (Math.random() * max + 1);
-                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + page + "&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters + "&with_runtime.gte=80&certification.lte=18&certification_country=ES";
+                peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + page + "&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters + "&with_runtime.gte=80&certification.lte=16&certification_country=ES";
             }
 
             // Obtener el JSON desde el enlace
@@ -135,7 +136,9 @@ public class MovieLoader {
                 String title = movieNode.get("title").asText();
                 String year = movieNode.get("release_date").asText().substring(0, 4);
                 double popularity = movieNode.get("popularity").asDouble();
+                String description = movieNode.get("overview").asText();
                 String score = scrapRating(title,id);
+
                 // DESCOMENTAR CUANDO FUNCIONE: scrapRating(title);
 
                 scrapIMG(title, String.valueOf(id));
@@ -143,7 +146,7 @@ public class MovieLoader {
                 String[] genres = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
 
                 // insercion
-                db.insertMovie(id, title, year, popularity, score);
+                db.insertMovie(id, title, year, popularity, score, description);
 
                 for (int i = 0; i < genres.length; i++) {
                     db.insertMovieGenre(id, Integer.parseInt(genres[i]));
@@ -156,7 +159,7 @@ public class MovieLoader {
     }
 
     public int getTotalPages(String first_year, String second_year, String search_by_parameters, String discard_parameters) throws IOException {
-        String peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=en-EN&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters + "&with_runtime.gte=80&certification.lte=18&certification_country=ES";
+        String peticion = "https://api.themoviedb.org/3/discover/movie?" + API_KEY + "&language=es-ES&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=" + first_year + "&primary_release_date.lte=" + second_year + "&with_watch_monetization_types=flatrate&with_genres=" + search_by_parameters + "&without_genres=" + discard_parameters + "&with_runtime.gte=80&certification.lte=16&certification_country=ES";
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(new URL(peticion));
 
@@ -283,9 +286,13 @@ public class MovieLoader {
         return db.getNumMovies(generos);
     }
 
-    public ArrayList<Movie> getRecommendedList(ArrayList<String> search_by, ArrayList<String> discard, boolean popularity_order) {
+    public ArrayList<Movie> getRecommendedList(int minYear, int maxYear, ArrayList<String> search_by, ArrayList<String> discard, boolean popularity_order) {
 
-        return db.getDataBaseRecommendedList(search_by, discard, popularity_order);
+        return db.getDataBaseRecommendedList(minYear,maxYear,search_by, discard, popularity_order);
+    }
+
+    public int getNumDataBaseMovies(int minYear, int maxYear,ArrayList<String> search_by, ArrayList<String> discard, boolean popularity_order){
+        return db.getNumDataBaseMovies(minYear,maxYear,search_by, discard, popularity_order);
     }
 
 }
