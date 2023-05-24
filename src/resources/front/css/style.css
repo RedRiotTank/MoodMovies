@@ -1,0 +1,82 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: roboto;
+}
+
+html, body{
+/*background: rgb(2,0,36);
+background: linear-gradient(133deg, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 15%, rgba(0,156,188,1) 52%, rgba(0,212,255,1) 77%);
+*/
+}
+
+h1{
+    margin-left: 3%;
+    margin-top: 1%;
+}
+
+form{
+    margin-top: 3%;
+    display: block;
+    margin-left: 3%;
+}
+
+form p{
+    margin-bottom: 1%;
+    margin-top: 1%;
+}
+
+form input{
+    margin-left: 2%;
+}
+
+#mood_selector{
+    margin-bottom: 1%;
+    margin-left: 2%;
+}
+
+#mood_selector input{
+    margin-left: 1%;
+}
+
+#year_selector_input{
+    width: 15%;
+}
+
+#year_selector label{
+    margin-left: 2%;
+}
+fieldset{
+    border: none;
+}
+
+#search_button{
+    display: flex;
+    margin-top: 2%;
+    margin-left: 1%;
+}
+
+#year_slider{
+    width: 30%;
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited, a.ui-button, a:link.ui-button, a:visited.ui-button, .ui-button {
+    color: #d11818;
+    text-decoration: none;
+    border: 1px solid #ff0000;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid #ff0000;
+    background: #e35252;
+    color: #fff;
+}
+
+.btnsele{
+    background-color:#6c757d;
+    color:#FFF;
+}
+
+.form-check-input[type="checkbox"]{
+    display:none;
+}

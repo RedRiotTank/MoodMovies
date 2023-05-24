@@ -43,17 +43,18 @@ public class HTTPsocket {
     public String[] getFormData() throws IOException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        String firstLine = in.readLine();
 
-        if (in.readLine().startsWith("POST")) {
+        if (firstLine != null && firstLine.startsWith("POST")) {
             System.out.println("Processing POST request...");
             StringBuilder requestBody = new StringBuilder();
             while (in.ready()) { // Leer todo el cuerpo de la solicitud
                 requestBody.append((char) in.read());
             }
             return requestBody.substring(requestBody.indexOf("\r\n\r\n") + 4).toString().split("&");
-        } else if (in.readLine().startsWith("GET")) {
+        } else if (firstLine != null && firstLine.startsWith("GET")) {
             System.out.println("Processing GET request...");
-            System.out.printf("THIS IS AN ERROR. Program should not be receiving GET requests. FormData IS NUL");
+            System.out.printf("THIS IS AN ERROR. Program should not be receiving GET requests. FormData IS NULL");
         }
 
         return null;
@@ -241,7 +242,7 @@ public class HTTPsocket {
             out.println("<p>Año: " + movie.getYear() + "</p>");
             out.println("<p>Director: " + movie.getDirector() + "</p>");
             out.println("<p>Puntuación: " + movie.getScore() + "</p>");
-            //out.println("<img src='" + movie.getImageUrl() + "' alt='Imagen de la película'>");
+            out.println("<img src='http://localhost:63342/MoodMovies/images/" + movie.getId() + ".jpg' alt='Imagen de la película: " + movie.getName() + "'>");
             out.println("<hr>");
         }
 

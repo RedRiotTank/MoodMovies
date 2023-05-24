@@ -9,88 +9,19 @@
     <script type="text/javascript" src="js/jquery-3.6.3.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+	<!-- nuestro css-->
+	<link rel="stylesheet" href="css/style.css">
 	<!-- nuestro js-->
 	<script type="text/javascript" src="js/index1.js"></script>
-	<script>
-		function checkGenres() {
-			var yesGenres = document.querySelectorAll('#yes_genres_fieldset input.genre_selector:checked');
-			var noGenres = document.querySelectorAll('#no_genres_fieldset input.genre_selector:checked');
-
-			for (var i = 0; i < yesGenres.length; i++) {
-				for (var j = 0; j < noGenres.length; j++) {
-					if (yesGenres[i].name === noGenres[j].name) {
-						alert("No puedes seleccionar el mismo género en 'Sí' y 'No'.");
-						return false;
-					}
-				}
-			}
-
-			return true;
-		}
-	</script>
 </head>
-<style type="text/css">
-	*{
-		padding: 0;
-		margin: 0;
-		font-family: roboto;
-	}
-	h1{
-		margin-left: 3%;
-		margin-top: 1%;
-	}
 
-	form{
-		margin-top: 3%;
-		display: block;
-		margin-left: 3%;
-	}
-
-	form p{
-		margin-bottom: 1%;
-		margin-top: 1%;
-	}
-
-	form input{
-		margin-left: 2%;
-	}
-
-	#mood_selector{
-		margin-bottom: 1%;
-		margin-left: 2%;
-	}
-
-	#mood_selector input{
-		margin-left: 1%;
-	}
-
-	#year_selector_input{
-		width: 15%;
-	}
-
-	#year_selector label{
-		margin-left: 2%;
-	}
-	fieldset{
-		border: none;
-	}
-
-	#search_button{
-		display: flex;
-		margin-top: 2%;
-		margin-left: 1%;
-	}
-
-	#year_slider{
-		width: 30%;
-	}
-
-</style>
 <body>
 	<h1>MooodMoovies - El recomendador de películas que necesitas</h1>
-	<form action="http://localhost:8080/" onsubmit="return checkGenres();" method="post">
-
-		<!-- Selector de moods-->
+	<!--form action="http://localhost:8080/" class="formsearchmovies" method="post"-->
+	<form action="http://localhost:8080/" class="formsearchmovies" method="post">
+	<!-- Selector de moods-->
 		<p>¿Cuál es tu mood hoy?</p>
 		<div id="mood_selector">
 		 	<input  type="radio" id="contento_mood" name="mood_option" value="good" checked>
@@ -100,7 +31,7 @@
 		 	<input  type="radio" id="mal_mood" name="mood_option" value="bad">
 		 	<label for="mal_mood">Mal</label>
 	 	</div>
-		
+
 		<!-- Selector de años-->
 	 	<div id="year_selector">
 			<p>¿De qué año quieres que sea tu película?</p>
@@ -119,64 +50,112 @@
 
 		<fieldset id="yes_genres_fieldset" class="fieldset1">
 			<legend>Géneros que te gustan:  </legend> 
-			<label for="checkbox-1">Acción</label>
-			<input type="checkbox" name="action" id="checkbox-1" class="genre_selector" value="yes">
-			<label for="checkbox-2">Animación</label>
-			<input type="checkbox" name="animation" id="checkbox-2" class="genre_selector" value="yes">
-			<label for="checkbox-3">Aventura</label>
-			<input type="checkbox" name="adventures" id="checkbox-3" class="genre_selector" value="yes">
-			<label for="checkbox-4">Comedia</label>
-			<input type="checkbox" name="comedy" id="checkbox-4" class="genre_selector" value="yes">
-			<label for="checkbox-5">Drama</label>
-			<input type="checkbox" name="drama" id="checkbox-5" class="genre_selector" value="yes">
-			<label for="checkbox-6">Fantasía</label>
-			<input type="checkbox" name="fantasy" id="checkbox-6" class="genre_selector" value="yes">
-			<label for="checkbox-7">Terror</label>
-			<input type="checkbox" name="horror" id="checkbox-7" class="genre_selector" value="yes">
-			<label for="checkbox-8">Misterio</label>
-			<input type="checkbox" name="mistery" id="checkbox-8" class="genre_selector" value="yes">
-			<label for="checkbox-9">Thriller</label>
-			<input type="checkbox" name="thriller" id="checkbox-9" class="genre_selector" value="yes">
-			<label for="checkbox-10">Oeste</label>
-			<input type="checkbox" name="western" id="checkbox-10" class="genre_selector" value="yes">
-			<label for="checkbox-28">Romance</label>
-			<input type="checkbox" name="romance" id="checkbox-28" class="genre_selector" value="yes">
-			<label for="checkbox-29">Ciencia Ficción</label>
-			<input type="checkbox" name="science_fiction" id="checkbox-29" class="genre_selector" value="yes">
-			<label for="checkbox-32">Crimen</label>
-			<input type="checkbox" name="crime" id="checkbox-32" class="genre_selector" value="yes">
+			<label for="checkbox-1" class="selectgenre btn btn-outline-secondary">Acción
+				<input type="checkbox" name="action" id="checkbox-1" class="form-check-input genre_selector" value="yes">
+			</label>
+			<label for="checkbox-2" class="selectgenre btn btn-outline-secondary">Animación
+				<input type="checkbox" name="animation" id="checkbox-2" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-3" class="selectgenre btn btn-outline-secondary">Aventura
+				<input type="checkbox" name="adventures" id="checkbox-3" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-4" class="selectgenre btn btn-outline-secondary">Comedia
+				<input type="checkbox" name="comedy" id="checkbox-4" class="form-check-input genre_selector" value="yes">
+			</label>
+			<label for="checkbox-5" class="selectgenre btn btn-outline-secondary">Drama
+				<input type="checkbox" name="drama" id="checkbox-5" class="form-check-input genre_selector" value="yes">
+			</label>
+			<label for="checkbox-6" class="selectgenre btn btn-outline-secondary">Fantasía
+				<input type="checkbox" name="fantasy" id="checkbox-6" class="form-check-input genre_selector" value="yes">
+			</label>
+			<label for="checkbox-7" class="selectgenre btn btn-outline-secondary">Terror
+				<input type="checkbox" name="horror" id="checkbox-7" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-8" class="selectgenre btn btn-outline-secondary">Misterio
+				<input type="checkbox" name="mistery" id="checkbox-8" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-9" class="selectgenre btn btn-outline-secondary">Thriller
+				<input type="checkbox" name="thriller" id="checkbox-9" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-10" class="selectgenre btn btn-outline-secondary">Oeste
+				<input type="checkbox" name="western" id="checkbox-10" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-28" class="selectgenre btn btn-outline-secondary">Romance
+				<input type="checkbox" name="romance" id="checkbox-28" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-29" class="selectgenre btn btn-outline-secondary">Ciencia Ficción
+				<input type="checkbox" name="science_fiction" id="checkbox-29" class="form-check-input genre_selector" value="yes">
+			</label>
+
+			<label for="checkbox-32" class="selectgenre btn btn-outline-secondary">Crimen
+				<input type="checkbox" name="crime" id="checkbox-32" class="form-check-input genre_selector" value="yes">
+			</label>
+
 			</fieldset>
 
 		<!-- Selector de generos a quitar-->
 		<p>¿Algún género que no te guste de los siguientes?</p>
 		<fieldset id="no_genres_fieldset" class="fieldset1">
 			<legend>Géneros que NO te gustan:  </legend>
-			<label for="checkbox-11">Acción</label>
-			<input type="checkbox" name="action" id="checkbox-11" class="genre_selector" value="no">
-			<label for="checkbox-12">Animación</label>
-			<input type="checkbox" name="animation" id="checkbox-12" class="genre_selector" value="no">
-			<label for="checkbox-13">Aventura</label>
-			<input type="checkbox" name="adventures" id="checkbox-13" class="genre_selector" value="no">
-			<label for="checkbox-14">Comedia</label>
-			<input type="checkbox" name="comedy" id="checkbox-14" class="genre_selector" value="no">
-			<label for="checkbox-15">Drama</label>
-			<input type="checkbox" name="drama" id="checkbox-15" class="genre_selector" value="no">
-			<label for="checkbox-16">Fantasía</label>
-			<input type="checkbox" name="fantasy" id="checkbox-16" class="genre_selector" value="no">
-			<label for="checkbox-17">Terror</label>
-			<input type="checkbox" name="horror" id="checkbox-17" class="genre_selector" value="no">
-			<label for="checkbox-18">Misterio</label>
-			<input type="checkbox" name="mistery" id="checkbox-18" class="genre_selector" value="no">
-			<label for="checkbox-19">Thriller</label>
-			<input type="checkbox" name="thriller" id="checkbox-19" class="genre_selector" value="no">
-			<label for="checkbox-20">Oeste</label>
-			<input type="checkbox" name="western" id="checkbox-20" class="genre_selector" value="no">
-			<label for="checkbox-30">Romance</label>
-			<input type="checkbox" name="romance" id="checkbox-30" class="genre_selector" value="no">
-			<label for="checkbox-31">Ciencia Ficción</label>
-			<input type="checkbox" name="science_fiction" id="checkbox-31" class="genre_selector" value="no">
-			<label for="checkbox-33">Crimen</label>
-			<input type="checkbox" name="crime" id="checkbox-33" class="genre_selector" value="no">
+			<label for="checkbox-11" class="selectgenre btn btn-outline-secondary">Acción
+				<input type="checkbox" name="action" id="checkbox-11" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-12" class="selectgenre btn btn-outline-secondary">Animación
+				<input type="checkbox" name="animation" id="checkbox-12" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-13" class="selectgenre btn btn-outline-secondary">Aventura
+				<input type="checkbox" name="adventures" id="checkbox-13" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-14" class="selectgenre btn btn-outline-secondary">Comedia
+				<input type="checkbox" name="comedy" id="checkbox-14" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-15" class="selectgenre btn btn-outline-secondary">Drama
+				<input type="checkbox" name="drama" id="checkbox-15" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-16" class="selectgenre btn btn-outline-secondary">Fantasía
+				<input type="checkbox" name="fantasy" id="checkbox-16" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-17" class="selectgenre btn btn-outline-secondary">Terror
+				<input type="checkbox" name="horror" id="checkbox-17" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-18" class="selectgenre btn btn-outline-secondary">Misterio
+				<input type="checkbox" name="mistery" id="checkbox-18" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-19" class="selectgenre btn btn-outline-secondary">Thriller
+				<input type="checkbox" name="thriller" id="checkbox-19" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-20" class="selectgenre btn btn-outline-secondary">Oeste
+				<input type="checkbox" name="western" id="checkbox-20" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-30" class="selectgenre btn btn-outline-secondary">Romance
+				<input type="checkbox" name="romance" id="checkbox-30" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-31" class="selectgenre btn btn-outline-secondary">Ciencia Ficción
+				<input type="checkbox" name="science_fiction" id="checkbox-31" class="form-check-input genre_selector" value="no">
+			</label>
+
+			<label for="checkbox-33" class="selectgenre btn btn-outline-secondary">Crimen
+				<input type="checkbox" name="crime" id="checkbox-33" class="form-check-input genre_selector" value="no">
+			</label>
+
 		</fieldset>
 
 		<fieldset id="Popularity">
@@ -184,7 +163,7 @@
 			<input type="checkbox" name="popularity" id="checkbox-34" class="popularity" value="yes">
 		</fieldset>
 
-		<button id="search_button" name="search" href="#" >Enviar</button>
+		<button id="search_button" name="search" class="btn btn-success" href="#" >Enviar</button>
 	</form>
 </body>
 </html>
