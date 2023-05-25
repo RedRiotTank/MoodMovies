@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import main.Main;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -126,15 +127,13 @@ public class MovieLoader {
                 String year = movieNode.get("release_date").asText().substring(0, 4);
                 double popularity = movieNode.get("popularity").asDouble();
                 String description = movieNode.get("overview").asText();
+                String path = movieNode.get("poster_path").asText();
                 String score = scrapRating(title,id);
 
-                // DESCOMENTAR CUANDO FUNCIONE: scrapRating(title);
-
-                scrapIMG(title, String.valueOf(id));
+                getImageAPI(path, id);
 
                 String[] genres = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
 
-                // insercion
                 db.insertMovie(id, title, year, popularity, score, description);
 
                 for (int i = 0; i < genres.length; i++) {
@@ -143,8 +142,25 @@ public class MovieLoader {
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
         return has_movies;
+    }
+
+    public void getImageAPI(String path, int id) throws IOException, URISyntaxException {
+        String imageUrl = "https://image.tmdb.org/t/p/original/" + path;
+        URL urlObject = new URL(imageUrl);
+        String fileName = id + ".jpg";
+        String jarPath = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        String jarDirectory = new File(jarPath).getParent();
+        String imagesDirectory = jarDirectory + File.separator + "images";
+        File directory = new File(imagesDirectory);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        Path targetPath = Paths.get(imagesDirectory, fileName);
+        Files.copy(urlObject.openStream(),targetPath);
     }
 
     public int getTotalPages(String first_year, String second_year, String search_by_parameters, String discard_parameters) throws IOException {
@@ -161,48 +177,6 @@ public class MovieLoader {
 
     public void loadMoviesScrap() {
 
-    }
-
-
-    public static void scrapIMG(String title, String id) {
-
-        title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
-        String fileName = id + ".jpg";
-        String filePath = "images/" + fileName;
-
-        File file = new File(filePath);
-        if (file.exists()) {
-            System.out.println("The image already exist, we're not scraping the image.");
-            return;
-        }
-
-        try {
-            // Establecer la URL de la página web que se va a analizar
-            String url = "https://www.themoviedb.org/movie/";
-            url = url + id;
-
-            // Conectar con la página web y descargar el código fuente HTML
-            Document document = Jsoup.connect(url).get();
-            // Buscar la imagen con la clase "summary_img" en el código fuente HTML
-            Element element = document.selectFirst("img.poster"); // NULL POINTER
-
-            if(element == null){
-                Path sourcePath = Path.of("images/0.jpg");
-                Path targetPath = Path.of("images/" + id + ".jpg");
-
-                Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
-            } else {
-                // Obtener la URL de la imagen
-                String imageUrl = element.attr("data-src"); // NULL POINTER
-                imageUrl = "https://www.themoviedb.org/" + imageUrl;
-                // Descargar la imagen y guardarla en el directorio "images"
-                URL urlObject = new URL(imageUrl);
-                Path targetPath = Paths.get("images", fileName);
-                Files.copy(urlObject.openStream(), targetPath);
-            }
-        } catch (IOException exception) {
-            System.out.println("ERROR: No se pudo realizar el web scraping de IMG: " + exception.getMessage());
-        }
     }
 
     public static String scrapRating(String tituloPelicula, int id){
