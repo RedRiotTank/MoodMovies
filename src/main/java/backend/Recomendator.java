@@ -1,8 +1,7 @@
 package backend;
 
-import Data.DataBase;
-import Data.MovieLoader;
 
+import Data.MovieLoader;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -88,22 +87,55 @@ public class Recomendator {
 
     public String tagtostring(Tag tag){
         String result = null;
-        switch (tag){
-            case ADVENTURE -> result = "12";
-            case FANTASY -> result = "14";
-            case ANIMATION -> result = "16";
-            case DRAMA -> result = "18";
-            case HORROR -> result = "27";
-            case ACTION -> result = "28";
-            case COMEDY -> result = "35";
-            case HISTORY -> result = "36";
-            case WESTERN -> result = "37";
-            case THRILLER -> result = "53";
-            case CRIME -> result = "80";
-            case MYSTERY -> result = "9648";
-            case ROMANCE -> result = "10749";
-            case SCIENCE_FICTION -> result = "878";
+        switch (tag) {
+            case ADVENTURE:
+                result = "12";
+                break;
+            case FANTASY:
+                result = "14";
+                break;
+            case ANIMATION:
+                result = "16";
+                break;
+            case DRAMA:
+                result = "18";
+                break;
+            case HORROR:
+                result = "27";
+                break;
+            case ACTION:
+                result = "28";
+                break;
+            case COMEDY:
+                result = "35";
+                break;
+            case HISTORY:
+                result = "36";
+                break;
+            case WESTERN:
+                result = "37";
+                break;
+            case THRILLER:
+                result = "53";
+                break;
+            case CRIME:
+                result = "80";
+                break;
+            case MYSTERY:
+                result = "9648";
+                break;
+            case ROMANCE:
+                result = "10749";
+                break;
+            case SCIENCE_FICTION:
+                result = "878";
+                break;
+            default:
+                // Opción por defecto si ninguna de las anteriores coincide
+                // Puedes asignar un valor apropiado o lanzar una excepción, según sea necesario
+                break;
         }
+
 
         return result;
 

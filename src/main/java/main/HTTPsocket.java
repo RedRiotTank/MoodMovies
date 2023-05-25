@@ -30,7 +30,6 @@ public class HTTPsocket {
                 formData = this.getFormData();
             }
 
-
             System.out.println("Connection accepted");
         } catch (IOException e) {
             System.err.println("Error al iniciar el servidor en el puerto " + portNumber);
@@ -41,7 +40,6 @@ public class HTTPsocket {
 
     }
     public String[] getFormData() throws IOException {
-
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         String firstLine = in.readLine();
 
@@ -52,16 +50,12 @@ public class HTTPsocket {
                 requestBody.append((char) in.read());
             }
             return requestBody.substring(requestBody.indexOf("\r\n\r\n") + 4).toString().split("&");
-        } else if (firstLine != null && firstLine.startsWith("GET")) {
-            System.out.println("Processing GET request...");
-            System.out.printf("THIS IS AN ERROR. Program should not be receiving GET requests. FormData IS NULL");
         }
 
         return null;
     }
 
     public Recomendator loadRecomedationInfo( MovieLoader mvloader){
-
         String mood = formData[0].substring(formData[0].indexOf("=") + 1);
         int min_year = Integer.parseInt(formData[1].substring(formData[1].indexOf("=") + 1));
         int max_year = Integer.parseInt(formData[2].substring(formData[2].indexOf("=") + 1));

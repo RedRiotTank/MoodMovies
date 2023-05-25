@@ -2,9 +2,6 @@ package Data;
 
 import backend.Movie;
 import backend.Tag;
-import net.officefloor.compile.section.SectionOutputType;
-
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +20,54 @@ public class DataBase extends Connector {
     private static String stringToTag(String str) {
         String result = null;
         switch (str) {
-            case "12" -> result = Tag.ADVENTURE.name().toUpperCase();
-            case "14" -> result = Tag.FANTASY.name().toUpperCase();
-            case "16" -> result = Tag.ANIMATION.name().toUpperCase();
-            case "18" -> result = Tag.DRAMA.name().toUpperCase();
-            case "27" -> result = Tag.HORROR.name().toUpperCase();
-            case "28" -> result = Tag.ACTION.name().toUpperCase();
-            case "35" -> result = Tag.COMEDY.name().toUpperCase();
-            case "36" -> result = Tag.HISTORY.name().toUpperCase();
-            case "37" -> result = Tag.WESTERN.name().toUpperCase();
-            case "53" -> result = Tag.THRILLER.name().toUpperCase();
-            case "80" -> result = Tag.CRIME.name().toUpperCase();
-            case "9648" -> result = Tag.MYSTERY.name().toUpperCase();
-            case "10749" -> result = Tag.ROMANCE.name().toUpperCase();
-            case "878" -> result = Tag.SCIENCE_FICTION.name().toUpperCase();
+            case "12":
+                result = Tag.ADVENTURE.name().toUpperCase();
+                break;
+            case "14":
+                result = Tag.FANTASY.name().toUpperCase();
+                break;
+            case "16":
+                result = Tag.ANIMATION.name().toUpperCase();
+                break;
+            case "18":
+                result = Tag.DRAMA.name().toUpperCase();
+                break;
+            case "27":
+                result = Tag.HORROR.name().toUpperCase();
+                break;
+            case "28":
+                result = Tag.ACTION.name().toUpperCase();
+                break;
+            case "35":
+                result = Tag.COMEDY.name().toUpperCase();
+                break;
+            case "36":
+                result = Tag.HISTORY.name().toUpperCase();
+                break;
+            case "37":
+                result = Tag.WESTERN.name().toUpperCase();
+                break;
+            case "53":
+                result = Tag.THRILLER.name().toUpperCase();
+                break;
+            case "80":
+                result = Tag.CRIME.name().toUpperCase();
+                break;
+            case "9648":
+                result = Tag.MYSTERY.name().toUpperCase();
+                break;
+            case "10749":
+                result = Tag.ROMANCE.name().toUpperCase();
+                break;
+            case "878":
+                result = Tag.SCIENCE_FICTION.name().toUpperCase();
+                break;
+            default:
+                // Opción por defecto si ninguna de las anteriores coincide
+                // Puedes asignar un valor apropiado o lanzar una excepción, según sea necesario
+                break;
         }
+
         return result;
     }
 

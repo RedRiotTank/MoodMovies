@@ -2,38 +2,27 @@ package Data;
 
 
 
-import backend.Mood;
+
 import backend.Movie;
-import backend.Tag;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.json.JSONObject;
-import org.json.JSONArray;
-import org.jsoup.select.Elements;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
-import backend.Mood;
+
 
 public class MovieLoader {
 
@@ -176,7 +165,7 @@ public class MovieLoader {
 
 
     public static void scrapIMG(String title, String id) {
-        System.out.println("proxerr: " + id);
+
         title = title.toLowerCase().replace(" ", "-").replace(":", "").replace("¿", "").replace("?", "");
         String fileName = id + ".jpg";
         String filePath = "images/" + fileName;
@@ -210,16 +199,9 @@ public class MovieLoader {
                 URL urlObject = new URL(imageUrl);
                 Path targetPath = Paths.get("images", fileName);
                 Files.copy(urlObject.openStream(), targetPath);
-
             }
-
-
-
-
         } catch (IOException exception) {
-            System.out.println("ERROR: No se pudo realizar el web scraping: " + exception.getMessage());
-
-
+            System.out.println("ERROR: No se pudo realizar el web scraping de IMG: " + exception.getMessage());
         }
     }
 
@@ -239,20 +221,17 @@ public class MovieLoader {
             Document document = Jsoup.connect(url).get();
             // Buscar la ecore en el código fuente HTML
             Element element = document.selectFirst("span.metascore_w");
-
-
-            if (true) {
-                String result = element.text();
-                if(result.equals("tbd")){
-                    throw new IOException();
-                }
-                return result;
-            } else {
-                ratingValue = "NF";
-                System.out.println("ScrapRating: se conecto a la página, no se encontro rating");
+            String result = element.text();
+            if(result.equals("tbd")){
+                throw new IOException();
             }
 
+            return result;
+
         } catch (IOException e) {
+            System.out.println("ERROR: No se pudo realizar el web scraping de RATING: " + e.getMessage());
+            System.out.println("Se intentará en themoviedatabase:");
+
             String urlTMD = "https://www.themoviedb.org/movie/" + id;
             try {
                 // Conectar con la página web y descargar el código fuente HTML
@@ -269,15 +248,16 @@ public class MovieLoader {
                 return score;
 
             } catch (IOException exception) {
-                System.out.println("A");
+                System.out.println("Tampoco se pudo hacer scrap al rating en themoviedatabase" + exception.getMessage());
+                ratingValue = "NF";
+                System.out.println("se introdujo NF");
+                return ratingValue;
             }
 
-            ratingValue = "NF";
-            System.out.println("ERROR: no se encontro la página scrapRating, se introdujo NF");
-            return ratingValue;
+
         }
 
-        return ratingValue;
+
 
     }
 
