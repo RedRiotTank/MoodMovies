@@ -1,0 +1,35 @@
+main .fullDisplay {
+  flex-basis: 70%;  /*Asignación del 70% del espacio total (distribución 30-70 del asi y el contenido general)*/
+  overflow-y: hidden; /*Si algún texto se sale de su caja, se oculta. */
+}
+
+.moviesDisplay {
+  text-align: center; /*Alineación de todos los textos al centro. Títulos, enlaces, títulos de las películas e inclusive las imágenes.*/
+}
+
+.moviesDisplay h5{
+        font-size: 150%; /*Apliamos Títulos.*/
+  padding-top: 2%;  /*separación superior de los títulos.*/
+}
+
+.moviesDisplay article {
+  display: inline-block;  /*Display de películas de izq a dcha y en bloque. Cuando llegue al tope pasa a la sigueinte linea abajo.*/
+  padding: 2%;            /*Separación entre películas.*/
+}
+
+.moviesDisplay article img {
+        transition: opacity 0.5s ease-out; /*Efecto de transición cuando pongo el cursor encima, así no se opaca de forma directa.*/
+  border-radius: 10px;  /*Redondear picos de las imágenes*/
+}
+
+.moviesDisplay article img:hover {
+  opacity: 0.4; /*reduce la opacidad de la imagen si el cursor está encima.*/
+}
+
+
+.moviesDisplay a.vertodo {
+  padding-top: 3%;  /*Separación superior de los enlaces.*/
+  font-size: 120%;  /*Incrementos en la fuente de los enlaces.*/
+  text-decoration: none;  /*Eliminar subrayado de los enlaces.*/
+
+}
