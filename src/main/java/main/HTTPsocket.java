@@ -4,16 +4,14 @@ import Data.MovieLoader;
 import backend.Movie;
 import backend.Recomendator;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 import java.util.ArrayList;
 
 import backend.stream;
 import backend.Tag;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class HTTPsocket {
     private final int portNumber = 8080; // Puerto en el que se va a escuchar
@@ -222,27 +220,55 @@ public class HTTPsocket {
         clientSocket.close();
     }
      */
-    public void httpOUT(ArrayList<Movie> movies) throws IOException {
+    public void httpOUT(Boolean found_movies) throws IOException {
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-        out.println("HTTP/1.1 200 OK");
-        out.println("Content-Type: text/html");
-        out.println("");
-        out.println("<html><meta charset=\"UTF-8\"><body>");
-        out.println("<h1>Películas: " + movies.size() + "</h1>");
+        out.println("HTTP/1.1 302 Found"); // Cambiamos el código de respuesta a 302
+        if(found_movies){
 
-        // Generar contenido dinámico con las películas
-        for (Movie movie : movies) {
-            out.println("<h2>" + movie.getName() + "</h2>");
-            out.println("<p>Año: " + movie.getYear() + "</p>");
-            out.println("<p>Director: " + movie.getDirector() + "</p>");
-            out.println("<p>Puntuación: " + movie.getScore() + "</p>");
-            out.println("<img src='http://localhost:63342/MoodMovies/images/" + movie.getId() + ".jpg' alt='Imagen de la película: " + movie.getName() + "'>");
-            out.println("<hr>");
+
+            out.println("Location: http://recomendator.moodmovies.net/recomendation/movies.php"); // Establecemos la URL de redirección
+        } else {
+            out.println("Location: http://recomendator.moodmovies.net/recomendation/noFoundMovies.php"); // Establecemos la URL de redirección
         }
 
-        out.println("</body></html>");
+        out.println(); // Línea en blanco para finalizar las cabeceras
         out.close();
         clientSocket.close();
     }
+
+    public void createJsonFile(ArrayList<Movie> movies) {
+        JSONArray movieArray = new JSONArray();
+
+        // Recorre cada película y crea un objeto JSON para cada una
+        for (Movie movie : movies) {
+            JSONObject movieObj = new JSONObject();
+            movieObj.put("id", movie.getId());
+            movieObj.put("name", movie.getName());
+            movieObj.put("year", movie.getYear());
+            movieObj.put("description", movie.getDescription());
+
+            JSONObject scoresObj = new JSONObject();
+            scoresObj.put("score_mc", movie.getScore_mc());
+            scoresObj.put("score_rt", movie.getScore_rt());
+
+            movieObj.put("scores", scoresObj);
+
+            movieArray.put(movieObj);
+        }
+
+        // Crea el archivo JSON y guarda los datos
+        try (FileWriter fileWriter = new FileWriter("movies.json")) {
+            fileWriter.write(movieArray.toString());
+            System.out.println("Archivo JSON creado correctamente.");
+        } catch (IOException e) {
+            System.out.println("Error al crear el archivo JSON: " + e.getMessage());
+        }
+    }
+
+
+
+
+
+
 
 }
