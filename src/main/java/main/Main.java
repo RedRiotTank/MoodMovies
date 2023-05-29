@@ -33,8 +33,17 @@ public class Main {
 
             ArrayList<Movie> movieList = recomendation.makeList(mvloader);
 
+            Boolean found_movies ;
+            if(movieList == null){
+                found_movies = false;
+                System.out.println("no found movies");
+            } else {
+                found_movies = true;
+                http_request.createJsonFile(movieList);
+            }
 
-            http_request.httpOUT(movieList);
+
+            http_request.httpOUT(found_movies);
             mvloader.getDb().disconnect();
         }
 

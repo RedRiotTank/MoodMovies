@@ -22,6 +22,8 @@ import org.jsoup.nodes.Element;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 
 
@@ -192,8 +194,22 @@ public class MovieLoader {
 
 
 
+
     public static String scrapRatingMC(String tituloPelicula){
-        String mcTitle = tituloPelicula.replaceAll("[:,¿?'?]", "").replaceAll(" ", "-").toLowerCase();
+        String normalizedTitle = Normalizer.normalize(tituloPelicula, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String mcTitle = pattern.matcher(normalizedTitle)
+                .replaceAll("")
+                .replaceAll("[:,¿?'?.]", "")
+                .replaceAll("\\s+", "-") // Reemplazar varios espacios en blanco seguidos por un solo guión
+                .replaceAll("-+", "-") // Reemplazar múltiples guiones consecutivos por un solo guión
+                .replace("&", "")
+                .toLowerCase();
+
+        mcTitle = mcTitle.replaceAll("-+", "-");
+
+
+
 
         String url = "https://www.metacritic.com/movie/" + mcTitle;
         String result;
@@ -202,6 +218,9 @@ public class MovieLoader {
             Document document = Jsoup.connect(url).get();
             Element element = document.selectFirst("span.metascore_w");
             result = element.text();
+
+            if (result.equals(""))
+                throw new IOException();
 
             if(result.equals("tbd"))
                 throw new IOException();
@@ -214,26 +233,36 @@ public class MovieLoader {
         return result;
     }
 
-    public static String scrapRatingRT(String tituloPelicula){
-        String rtTitle = tituloPelicula.replaceAll("[:,¿?'?]", "").replaceAll(" ", "_").toLowerCase();
+
+
+    public static String scrapRatingRT(String tituloPelicula) {
+        // Remover los caracteres especiales y reemplazar las letras con tilde
+        String normalizedTitle = Normalizer.normalize(tituloPelicula, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String rtTitle = pattern.matcher(normalizedTitle).replaceAll("").replaceAll("[:,¿?'?.]", "").replaceAll(" ", "_").replace("&", "and").toLowerCase();
+
         String url = "https://www.rottentomatoes.com/m/" + rtTitle;
         String result;
 
         try {
             Document document = Jsoup.connect(url).get();
-            Element element = document.selectFirst("span.percentage");
+            Element element = document.selectFirst("score-board");
 
-            if(element == null)
+            if (element == null)
                 throw new IOException();
-            result = element.text();
+
+            result = element.attr("audiencescore");
+
+            if (result.equals(""))
+                throw new IOException();
 
         } catch (IOException e) {
             System.out.println("ERROR: No se pudo realizar el web scraping de RATING en Rottentomatoes: " + e.getMessage());
             return "NF";
         }
         return result;
-
     }
+
 
     // Se obtiene el numero de peliculas obtenidas de la bd con los generos de la lista <generos>
     public int getNumMoviesRecommended(ArrayList<String> generos) throws SQLException {

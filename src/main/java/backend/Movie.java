@@ -63,8 +63,8 @@ public class Movie {
         this.score_rt = score_rt;
     }
 
-    public int getYear() {
-        return year;
+    public String getYear() {
+        return Integer.toString(year);
     }
 
     public void setYear(int year) {
@@ -79,8 +79,8 @@ public class Movie {
         this.director = director;
     }
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return Integer.toString(id);
     }
 
     public void setId(int id) {

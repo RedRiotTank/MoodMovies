@@ -110,6 +110,9 @@ public class DataBase extends Connector {
     public ArrayList<Movie> getDataBaseRecommendedList(int minYear, int maxYear,ArrayList<String> search_by,ArrayList<String> discard, boolean popularity_order){
         ArrayList<Movie> recommendedList = new ArrayList<>();
 
+        if(search_by.isEmpty() || discard.isEmpty())
+            return null;
+
         try {
             // Crear la consulta SQL dinámicamente
             StringBuilder sqlBuilder = new StringBuilder();
@@ -216,7 +219,7 @@ public class DataBase extends Connector {
                     sqlBuilder.append(", ");
                 }
             }
-            sqlBuilder.append(") AND m.year >= '"+minYear+"' AND m.year <= '"+maxYear+"' ");
+            sqlBuilder.append(") AND m.year >= ? AND m.year <= ? ");
 
             // Agregar los géneros excluidos a la consulta
             if (!discard.isEmpty()) {
@@ -234,11 +237,10 @@ public class DataBase extends Connector {
                 }
 
                 sqlBuilder.append("))");
-                if(popularity_order){
-                    sqlBuilder.append("ORDER BY m.popularity DESC");
-                }
-                //sqlBuilder.append(" LIMIT 20");
+            }
 
+            if (popularity_order) {
+                sqlBuilder.append(" ORDER BY m.popularity DESC");
             }
 
             System.out.println("consulta contadora: " + sqlBuilder);
@@ -257,19 +259,11 @@ public class DataBase extends Connector {
                 pstmt.setString(paramIndex + i, stringToTag(discard.get(i)));
             }
 
-            //System.out.println(sqlBuilder);
-            // Ejecutar la consulta
-            ResultSet rs = pstmt.executeQuery();
+            // Establecer los valores de los parámetros de los años
+            pstmt.setInt(search_by.size() + discard.size() + 1, minYear);
+            pstmt.setInt(search_by.size() + discard.size() + 2, maxYear);
 
-            // Iterar sobre los resultados y construir las instancias de Movie
-            while (rs.next()) {
-                return rs.getInt("total_movies");
-            }
-
-            // Cerrar la conexión y liberar recursos
-            rs.close();
-            pstmt.close();
-            conn.close();
+            // ...
         } catch (SQLException e) {
             e.printStackTrace();
         }
