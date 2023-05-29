@@ -128,12 +128,15 @@ public class MovieLoader {
                 double popularity = movieNode.get("popularity").asDouble();
                 String description = movieNode.get("overview").asText();
                 String path = movieNode.get("poster_path").asText();
-                String score = scrapRating(title,id);
+
+                String score = scrapRatingMC(title);
+                String score2 = scrapRatingRT(title);
 
                 getImageAPI(path, id);
 
                 String[] genres = objectMapper.convertValue(movieNode.get("genre_ids"), String[].class);
 
+                // insercion
                 db.insertMovie(id, title, year, popularity, score, description);
 
                 for (int i = 0; i < genres.length; i++) {
@@ -179,59 +182,49 @@ public class MovieLoader {
 
     }
 
-    public static String scrapRating(String tituloPelicula, int id){
-        String tituloPeliculaCambiado = tituloPelicula.replaceAll("[:,¿?'?]", "");
 
-        // Reemplazar espacios por guiones
-        tituloPeliculaCambiado = tituloPeliculaCambiado.replaceAll(" ", "-");
 
-        // Convertir a minúsculas
-        tituloPeliculaCambiado = tituloPeliculaCambiado.toLowerCase();
-        String url = "https://www.metacritic.com/movie/" + tituloPeliculaCambiado;
-        String ratingValue = " ";
+
+    public static String scrapRatingMC(String tituloPelicula){
+        String mcTitle = tituloPelicula.replaceAll("[:,¿?'?]", "").replaceAll(" ", "-").toLowerCase();
+
+        String url = "https://www.metacritic.com/movie/" + mcTitle;
+        String result;
 
         try {
-            // Conectar con la página web y descargar el código fuente HTML
             Document document = Jsoup.connect(url).get();
-            // Buscar la ecore en el código fuente HTML
             Element element = document.selectFirst("span.metascore_w");
-            String result = element.text();
-            if(result.equals("tbd")){
-                throw new IOException();
-            }
+            result = element.text();
 
-            return result;
+            if(result.equals("tbd"))
+                throw new IOException();
 
         } catch (IOException e) {
-            System.out.println("ERROR: No se pudo realizar el web scraping de RATING: " + e.getMessage());
-            System.out.println("Se intentará en themoviedatabase:");
-
-            String urlTMD = "https://www.themoviedb.org/movie/" + id;
-            try {
-                // Conectar con la página web y descargar el código fuente HTML
-                Document document = Jsoup.connect(urlTMD).get();
-                // Buscar la ecore en el código fuente HTML
-                Element element = document.selectFirst("div.user_score_chart");
-                String score = element.attr("data-percent");
-                int puntoIndex = score.indexOf(".");
-
-                if (puntoIndex != -1) {
-                    score =  score.substring(0, puntoIndex);
-                }
-
-                return score;
-
-            } catch (IOException exception) {
-                System.out.println("Tampoco se pudo hacer scrap al rating en themoviedatabase" + exception.getMessage());
-                ratingValue = "NF";
-                System.out.println("se introdujo NF");
-                return ratingValue;
-            }
-
-
+            System.out.println("ERROR: No se pudo realizar el web scraping de RATING en Metacritic: " + e.getMessage());
+            return "NF";
         }
 
+        return result;
+    }
 
+    public static String scrapRatingRT(String tituloPelicula){
+        String rtTitle = tituloPelicula.replaceAll("[:,¿?'?]", "").replaceAll(" ", "_").toLowerCase();
+        String url = "https://www.rottentomatoes.com/m/" + rtTitle;
+        String result;
+
+        try {
+            Document document = Jsoup.connect(url).get();
+            Element element = document.selectFirst("span.percentage");
+
+            if(element == null)
+                throw new IOException();
+            result = element.text();
+
+        } catch (IOException e) {
+            System.out.println("ERROR: No se pudo realizar el web scraping de RATING en Rottentomatoes: " + e.getMessage());
+            return "NF";
+        }
+        return result;
 
     }
 
