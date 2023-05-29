@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class Movie {
 
     private String name;
-    private String score;
+    private String score_mc;
+    private String score_rt;
     private int year;
     private String director;
     private int id;
@@ -16,7 +17,8 @@ public class Movie {
 
     public Movie(){
         this.id = 0;
-        this.score = "";
+        this.score_mc = "";
+        this.score_rt = "";
         this.director = "";
         this.name = "";
         this.year = 0;
@@ -25,10 +27,11 @@ public class Movie {
         genres = new ArrayList<>();
     }
 
-    public Movie(int id, String name, String score, int year, double popularity, String director, String description){
+    public Movie(int id, String name, String score_mc, String score_rt, int year, double popularity, String director, String description){
         this.id = id;
         this.name = name;
-        this.score = score;
+        this.score_mc = score_mc;
+        this.score_rt = score_rt;
         this.year = year;
         this.popularity = popularity;
         this.director = director;
@@ -44,12 +47,20 @@ public class Movie {
         this.name = name;
     }
 
-    public String getScore() {
-        return score;
+    public String getScore_mc() {
+        return score_mc;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setScore_mc(String score_mc) {
+        this.score_mc = score_mc;
+    }
+
+    public String getScore_rt() {
+        return score_rt;
+    }
+
+    public void setScore_rt(String score_rt) {
+        this.score_rt = score_rt;
     }
 
     public int getYear() {
@@ -90,16 +101,5 @@ public class Movie {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "name='" + name + '\'' +
-                ", score='" + score + '\'' +
-                ", year=" + year +
-                ", popularity=" + popularity +
-                ", description=" + description +
-                '}';
     }
 }

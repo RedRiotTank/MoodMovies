@@ -113,7 +113,7 @@ public class DataBase extends Connector {
         try {
             // Crear la consulta SQL dinámicamente
             StringBuilder sqlBuilder = new StringBuilder();
-            sqlBuilder.append("SELECT DISTINCT m.id, m.title, m.year, m.popularity, m.score, m.description ")
+            sqlBuilder.append("SELECT DISTINCT m.id, m.title, m.year, m.popularity, m.score_mc, m.score_rt, m.description ")
                     .append("FROM Movies AS m ")
                     .append("INNER JOIN Movies_Genres AS mg ON m.id = mg.movie_id ")
                     .append("INNER JOIN Genres AS g ON mg.genre_id = g.id ")
@@ -151,7 +151,7 @@ public class DataBase extends Connector {
 
             }
 
-            System.out.println(sqlBuilder);
+            System.out.println("consulta lista recomendada: " + sqlBuilder);
 
             // Crear el objeto PreparedStatement
             PreparedStatement pstmt = conn.prepareStatement(sqlBuilder.toString());
@@ -177,11 +177,12 @@ public class DataBase extends Connector {
                 String title = rs.getString("title");
                 int year = rs.getInt("year");
                 double popularity = rs.getDouble("popularity");
-                String score = rs.getString("score");
+                String score_mc = rs.getString("score_mc");
+                String score_rt = rs.getString("score_rt");
                 String description = rs.getString("description");
 
                 // Crear una instancia de Movie y agregarla a la lista
-                Movie movie = new Movie(id, title, score, year, popularity, "", description);
+                Movie movie = new Movie(id, title, score_mc, score_rt, year, popularity, "", description);
                 recommendedList.add(movie);
             }
 
@@ -240,7 +241,7 @@ public class DataBase extends Connector {
 
             }
 
-            System.out.println(sqlBuilder);
+            System.out.println("consulta contadora: " + sqlBuilder);
 
             // Crear el objeto PreparedStatement
             PreparedStatement pstmt = conn.prepareStatement(sqlBuilder.toString());
@@ -306,7 +307,7 @@ public class DataBase extends Connector {
         }
     }
 
-    public void insertMovie(int id, String title, String year, double popularity, String score, String description) throws SQLException {
+    public void insertMovie(int id, String title, String year, double popularity, String description, String score_mc, String score_rt) throws SQLException {
         // Verificar si la ID ya existe en la base de datos
         String checkQuery = "SELECT COUNT(*) FROM Movies WHERE id = ?";
         try (PreparedStatement checkStatement = conn.prepareStatement(checkQuery)) {
@@ -322,15 +323,17 @@ public class DataBase extends Connector {
         }
 
         // Insertar la tupla en la base de datos
-        String insertQuery = "INSERT INTO Movies (id, title, year, popularity, score, description) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO Movies (id, title, year, popularity, description, score_mc, score_rt) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(insertQuery)) {
             statement.setInt(1, id);
             statement.setString(2, title);
             statement.setString(3, year);
             statement.setDouble(4, popularity);
-            statement.setString(5, score);
-            statement.setString(6, description);
+            statement.setString(5, description);
+            statement.setString(6, score_mc);
+            statement.setString(7, score_rt);
 
+            System.out.println("consulta insercion: " + insertQuery);
             statement.executeUpdate();
             System.out.println("----Se ha insertado la pelicula " + title + "------");
         } catch (SQLException e){
