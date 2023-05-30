@@ -147,12 +147,15 @@ public class DataBase extends Connector {
                 }
 
                 sqlBuilder.append("))");
-                if(popularity_order){
-                    sqlBuilder.append("ORDER BY m.popularity DESC");
-                }
-                sqlBuilder.append(" LIMIT 20");
+
+
 
             }
+
+            if(popularity_order){
+                sqlBuilder.append("ORDER BY m.popularity DESC");
+            }
+            sqlBuilder.append(" LIMIT 20");
 
             System.out.println("consulta lista recomendada: " + sqlBuilder);
 

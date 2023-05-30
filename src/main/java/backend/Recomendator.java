@@ -196,7 +196,7 @@ public class Recomendator {
         System.out.println("Hay un TOTAL de " + total_movies + " peliculas en la bd");
 
         // si no hay suficientes peliculas en bd, se buscan
-        if(total_movies < 20 && total_movies > 0){
+        if(total_movies < 20 && total_movies >= 0){
             System.out.println("Buscando peliculas en nuestras fuentes de datos");
             mvloader.discoverMoviesWith(popularity, 1, Integer.toString(this.minYear), Integer.toString(this.maxYear+1), this.getSearch_by(), this.getDiscard());
             //mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
