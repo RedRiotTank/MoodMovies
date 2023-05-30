@@ -219,7 +219,7 @@ public class DataBase extends Connector {
                     sqlBuilder.append(", ");
                 }
             }
-            sqlBuilder.append(") AND m.year >= ? AND m.year <= ? ");
+            sqlBuilder.append(") AND m.year >= '"+minYear+"' AND m.year <= '"+maxYear+"' ");
 
             // Agregar los géneros excluidos a la consulta
             if (!discard.isEmpty()) {
@@ -237,13 +237,14 @@ public class DataBase extends Connector {
                 }
 
                 sqlBuilder.append("))");
+                if(popularity_order){
+                    sqlBuilder.append("ORDER BY m.popularity DESC");
+                }
+                //sqlBuilder.append(" LIMIT 20");
+
             }
 
-            if (popularity_order) {
-                sqlBuilder.append(" ORDER BY m.popularity DESC");
-            }
-
-            System.out.println("consulta contadora: " + sqlBuilder);
+            System.out.println(sqlBuilder);
 
             // Crear el objeto PreparedStatement
             PreparedStatement pstmt = conn.prepareStatement(sqlBuilder.toString());
@@ -259,11 +260,19 @@ public class DataBase extends Connector {
                 pstmt.setString(paramIndex + i, stringToTag(discard.get(i)));
             }
 
-            // Establecer los valores de los parámetros de los años
-            pstmt.setInt(search_by.size() + discard.size() + 1, minYear);
-            pstmt.setInt(search_by.size() + discard.size() + 2, maxYear);
+            //System.out.println(sqlBuilder);
+            // Ejecutar la consulta
+            ResultSet rs = pstmt.executeQuery();
 
-            // ...
+            // Iterar sobre los resultados y construir las instancias de Movie
+            while (rs.next()) {
+                return rs.getInt("total_movies");
+            }
+
+            // Cerrar la conexión y liberar recursos
+            rs.close();
+            pstmt.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
