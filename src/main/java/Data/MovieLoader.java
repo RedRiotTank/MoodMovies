@@ -153,26 +153,29 @@ public class MovieLoader {
     }
 
     public void getImageAPI(String path, int id) throws IOException, URISyntaxException {
-        String imageUrl = "https://image.tmdb.org/t/p/w342/" + path;
-        URL urlObject = new URL(imageUrl);
-        String fileName = id + ".jpg";
-        String jarPath = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        String jarDirectory = new File(jarPath).getParent();
-        String imagesDirectory = jarDirectory + File.separator + "images";
-        File directory = new File(imagesDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        Path targetPath = Paths.get(imagesDirectory, fileName);
+        if(path != null){
+            String imageUrl = "https://image.tmdb.org/t/p/w342/" + path;
+            URL urlObject = new URL(imageUrl);
+            String fileName = id + ".jpg";
+            String jarPath = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            String jarDirectory = new File(jarPath).getParent();
+            String imagesDirectory = jarDirectory + File.separator + "images";
+            File directory = new File(imagesDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            Path targetPath = Paths.get(imagesDirectory, fileName);
 
-        try (InputStream inputStream = urlObject.openStream()) {
-            // si la imagen ya existe, la reemplaza
-            Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Imagen guardada exitosamente.");
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Aquí puedes manejar el error de alguna manera específica si lo deseas.
+            try (InputStream inputStream = urlObject.openStream()) {
+                // si la imagen ya existe, la reemplaza
+                Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Imagen guardada exitosamente.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Aquí puedes manejar el error de alguna manera específica si lo deseas.
+            }
         }
+
     }
 
     public int getTotalPages(String first_year, String second_year, String search_by_parameters, String discard_parameters) throws IOException {
