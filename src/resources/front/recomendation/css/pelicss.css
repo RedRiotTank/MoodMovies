@@ -1,0 +1,123 @@
+.pelidisplay{
+  flex-basis: 70%;  /*Asignación del 70% del espacio total (distribución 30-70 del asi y el contenido general)*/
+  text-align: center; /*Alineo al centro los elementos de texto (títulos e imagen)*/ 
+}
+
+.pelidisplay .cartelera{
+  margin: 2% auto;  /*Margen a lo alto imagen película.*/ 
+  transition: opacity 0.3s ease-in-out;  /*Efecto de transición cuando pongo el cursor encima, así no se opaca de forma directa.*/
+  border-radius: 10px;  /*Redondear picos de las imágenes*/
+}
+
+ .pelidisplay .cartelera:hover {
+  opacity: 0.7; /*reduce la opacidad de la imagen si el cursor está encima.*/
+}
+
+.pelidisplay ul{
+  list-style: none; /*Elimina el estilo de la lista de información.*/
+  text-align: justify;  /*Estilo de texto justificado (no se pone todo centrado)*/
+  margin-left: 35%; /*Margen a la izquierda en el texto.*/
+}
+
+.paragraph{
+  font-family: "Times New Roman", Times, serif; /*Cambiar formato de texto.*/
+  font-size: 130%;  /*Aumentar tamño de fuente.*/
+  margin: 3% 20%;   /*Margenes a lo alto y ancho en el texto.*/
+}
+
+.titulo{
+  font-size: 200%;  /*Aumenta el tamaño del título de la película*/
+}
+
+.sinopsis{
+  font-size: 160%;  /*Aumenta el tamaño de la sinopsis.*/
+}
+
+#imagenes {
+  display: flex;  /*Modo de visualización flexible*/
+  flex-direction: row;  /*en direción fila*/
+  overflow-x: auto; /* para permitir desplazamiento horizontal */
+  margin: 1%; /*Margen para que se separe de los bordes de la pantalla.*/
+  border-radius: 100px; /*Redondeado d elos picos DEL DIV*/
+}
+
+#imagenes img { /*Tengo que especificar que es el tamaño completo porque si no 
+                  me empuja el aside, esto no se porque sucede.*/
+  width: 100%;
+  height: 100%;
+}
+
+
+
+/* Sección de comentarios */
+
+h2.comentariostitulo{
+  padding: 2% 0;  /*Padding a lo alto*/
+}
+.comentarios {
+  list-style-type: none;  /*Eliminar estilo por defecto de la lista*/
+  margin: 0;  /*no margenes*/
+  padding: 0; /*no paddings*/
+}
+
+.comentarios li {
+  display: flex;  /*Distribución flexible para cada elemento de la lista (cada comentario)*/
+  margin-bottom: 6%;  /* margen inferior entre cada comentario */
+}
+
+.comentarios img {
+  margin-right: 1%; /*Margen a la derecha*/
+  border-radius: 100%; /*imágenes circulares*/
+}
+
+.comentarios h3 {
+  margin: 0;  /*eliminar margen al título*/
+  font-size: 120%;  /*Aumentar tamao de fuente*/
+  font-weight: bold;  /*Especificar negrita*/
+}
+
+.comentarios p {
+  margin: 2% 0; /*margen a lo alto para que no esté tan agolpado.*/
+  font-size: 120%;  /*Aumentar tamaño del texto del comentario.*/
+  margin-right: 5%;
+}
+
+/*introducir comentario*/
+
+form.ponercomentario {
+  display: flex;  /*Display flexible*/
+  flex-direction: column; /*que va por columnas*/
+  align-items: center;    /*Centrado de objetos*/
+  border: 1px solid black;  /*Borde a todo el formulario*/
+  padding: 2%;  /*padding para dar claridad al formulario*/
+}
+
+form.ponercomentario label {
+  margin-top: 1%;     /*Margen superior*/
+  font-weight: bold;  /*negrita en l etiqueta*/
+}
+
+form.ponercomentario .input-field {
+  border: 100% solid black; /*borde en el input*/
+  padding: 0.5%;  /*padding para separarlo un poco*/
+  margin: 1%;     /*margin para separarlo un poco*/
+  width: 15%;     /*reduzco el ancho.*/
+}
+
+form.ponercomentario .estrellas {
+  display: flex;  /*Display flexible*/
+  justify-content: space-between; /*Espacios entre los números*/
+  margin: 1%; /*meto un pequeño margen*/
+  width: 15%; /*reduzco el ancho*/
+}
+
+
+.submit-button {
+  background-color: green;  /*botón verde*/
+  color: white; /*letras del botón blancas*/
+  padding: 1% 4%; /*Agrando la superficie del botón*/
+  border: none; /*eliminamos el borde*/
+  border-radius: 10%; /*redondeamos los picos del botón.*/
+  cursor: pointer;  /*cuando pasa el cursor por encima s epone en modo puntero.*/
+  margin-top: 10px; /*margen superior*/
+}
