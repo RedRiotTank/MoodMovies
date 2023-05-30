@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException, SQLException, URISyntaxException {
 
-        System.out.println("Iniciando Sistema de control MoodMovies:");
+        System.out.println("Iniciando Sistema de control MoodMovies:");//start
 
         DataBase database = null;
         MovieLoader mvloader = null;
