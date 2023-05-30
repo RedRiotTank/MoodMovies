@@ -25,12 +25,11 @@ public class Main {
         MovieLoader mvloader = null;
 
         while(true){
-            database = new DataBase();
-            mvloader = new MovieLoader(database);
             HTTPsocket http_request = new HTTPsocket();
 
+            database = new DataBase();
+            mvloader = new MovieLoader(database);
             Recomendator recomendation = http_request.loadRecomedationInfo(mvloader);
-
             ArrayList<Movie> movieList = recomendation.makeList(mvloader);
 
             Boolean found_movies ;
