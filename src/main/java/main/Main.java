@@ -33,7 +33,7 @@ public class Main {
             ArrayList<Movie> movieList = recomendation.makeList(mvloader);
 
             Boolean found_movies ;
-            if(movieList == null){
+            if(movieList == null || movieList.isEmpty()){
                 found_movies = false;
                 System.out.println("no found movies");
             } else {

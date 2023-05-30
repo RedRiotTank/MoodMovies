@@ -110,7 +110,7 @@ public class DataBase extends Connector {
     public ArrayList<Movie> getDataBaseRecommendedList(int minYear, int maxYear,ArrayList<String> search_by,ArrayList<String> discard, boolean popularity_order){
         ArrayList<Movie> recommendedList = new ArrayList<>();
 
-        if(search_by.isEmpty() || discard.isEmpty())
+        if(search_by.isEmpty())
             return null;
 
         try {
@@ -202,6 +202,9 @@ public class DataBase extends Connector {
 
     public int getNumDataBaseMovies(int minYear, int maxYear,ArrayList<String> search_by,ArrayList<String> discard, boolean popularity_order){
         ArrayList<Movie> recommendedList = new ArrayList<>();
+
+        if(search_by.isEmpty())
+            return -1;
 
         try {
             // Crear la consulta SQL dinámicamente
