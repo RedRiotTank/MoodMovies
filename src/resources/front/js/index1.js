@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    $('.genre_selector').prop('checked', false);
+
     // funcion que aumenta y dismuniye los años del range
     $( "#year_slider" ).slider({
         range: true,
@@ -45,6 +47,7 @@ $(document).ready(function(){
             icon: false
           });*/
 
+    
     function formsearchmovies(e){
         e.preventDefault();
 

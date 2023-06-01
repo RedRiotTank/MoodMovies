@@ -1,6 +1,6 @@
 <section class="fullDisplay">
         <section class="moviesDisplay">
-
+        <h3>Aquí están sus películas</h3>
         <?php
 
             $jsonData = file_get_contents('/home/albertoplazamontesdm/MoodMovies/movies.json');

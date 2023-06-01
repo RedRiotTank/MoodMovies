@@ -1,9 +1,11 @@
 <section class="pelidisplay">
+
+<h2 class="titulo"><?php echo "$name"?></h2>
     <a href="a.html">
         <img class="cartelera" src="images/<?php echo $id; ?>.jpg" alt="ERROR" width="265" height="377.5" />
     </a>
 
-        <h1 class="titulo"><?php echo "$name"?></h1>
+        
 
         <ul class="paragraph">
                 <li><strong>Año:</strong> <?php echo "$year"?>.</li>

@@ -13,23 +13,33 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 	<!-- nuestro css-->
 	<link rel="stylesheet" href="css/style.css">
+	<!--https://ionicabizau.github.io/emoji.css/-->
+	<link rel='stylesheet' href='https://unpkg.com/emoji.css/dist/emoji.min.css'>
 	<!-- nuestro js-->
 	<script type="text/javascript" src="js/index1.js"></script>
+	<link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
 </head>
 
 <body>
-	<h1>MooodMoovies - El recomendador de películas que necesitas</h1>
+	<header>
+		<h1>MoodMovies - El recomendador de películas que necesitas</h1>
+	</header>
+	<section>
 	<!--form action="http://34.175.4.212:8080/" class="formsearchmovies" method="post"-->
 	<form action="http://localhost:8080/" class="formsearchmovies" method="post">
 	<!-- Selector de moods-->
 		<p>¿Cuál es tu mood hoy?</p>
+		<p>Selecciona el emoji que te represente de las siguientes: </p>
 		<div id="mood_selector">
-		 	<input  type="radio" id="contento_mood" name="mood_option" value="good" checked>
-		 	<label for="contento_mood">Contento</label>
-		 	<input  type="radio" id="normal_mood" name="mood_option" value="normal">
-		 	<label for="normal_mood">Normal</label>
-		 	<input  type="radio" id="mal_mood" name="mood_option" value="bad">
-		 	<label for="mal_mood">Mal</label>
+		 	<input  type="radio" id="contento_mood" name="mood_option" value="good" class="emoji-input" checked>
+		 	<label for="contento_mood" class="emoji"><span class='ec ec-grin'></span>
+			 </label>
+		 	<input  type="radio" id="normal_mood" name="mood_option" value="normal" class="emoji-input">
+		 	<label for="normal_mood" class="emoji"><span class="ec ec-neutral-face"></span>
+			 </label>
+		 	<input  type="radio" id="mal_mood" name="mood_option" value="bad" class="emoji-input">
+		 	<label for="mal_mood" class="emoji"><span class="ec ec-unamused"></span>
+			 </label>
 	 	</div>
 
 		<!-- Selector de años-->
@@ -38,8 +48,8 @@
 			<p>
 				<label for="years">Peliculas entre los años:</label>
 
-				<input type="text" name="years_desde" id="years_desde" readonly style="border:0; color:#f61f1f; font-weight:bold;">
-				<input type="text" name="years_hasta" id="years_hasta" readonly style="border:0; color:#f61f1f; font-weight:bold;">
+				<input type="text" name="years_desde" id="years_desde" readonly >
+				<input type="text" name="years_hasta" id="years_hasta" readonly>
 
 			</p>
 			   
@@ -49,7 +59,7 @@
 		<p>¿Algún género que te guste de los siguientes?</p>
 
 		<fieldset id="yes_genres_fieldset" class="fieldset1">
-			<legend>Géneros que te gustan:  </legend> 
+			<!--<legend>Géneros que te gustan:  </legend> -->
 			<label for="checkbox-1" class="selectgenre btn btn-outline-secondary">Acción
 				<input type="checkbox" name="action" id="checkbox-1" class="form-check-input genre_selector" value="yes">
 			</label>
@@ -73,7 +83,7 @@
 			<label for="checkbox-7" class="selectgenre btn btn-outline-secondary">Terror
 				<input type="checkbox" name="horror" id="checkbox-7" class="form-check-input genre_selector" value="yes">
 			</label>
-
+			<br>
 			<label for="checkbox-8" class="selectgenre btn btn-outline-secondary">Misterio
 				<input type="checkbox" name="mistery" id="checkbox-8" class="form-check-input genre_selector" value="yes">
 			</label>
@@ -103,7 +113,7 @@
 		<!-- Selector de generos a quitar-->
 		<p>¿Algún género que no te guste de los siguientes?</p>
 		<fieldset id="no_genres_fieldset" class="fieldset1">
-			<legend>Géneros que NO te gustan:  </legend>
+			<!--<legend>Géneros que NO te gustan:  </legend> -->
 			<label for="checkbox-11" class="selectgenre btn btn-outline-secondary">Acción
 				<input type="checkbox" name="action" id="checkbox-11" class="form-check-input genre_selector" value="no">
 			</label>
@@ -131,7 +141,7 @@
 			<label for="checkbox-17" class="selectgenre btn btn-outline-secondary">Terror
 				<input type="checkbox" name="horror" id="checkbox-17" class="form-check-input genre_selector" value="no">
 			</label>
-
+			<br>
 			<label for="checkbox-18" class="selectgenre btn btn-outline-secondary">Misterio
 				<input type="checkbox" name="mistery" id="checkbox-18" class="form-check-input genre_selector" value="no">
 			</label>
@@ -157,13 +167,25 @@
 			</label>
 
 		</fieldset>
+		
+		<div class="content-popularity">
+			<fieldset id="Popularity">
+				<label for="checkbox-34">Selecciona para ordenar tus peliculas por popularidad</label>
+				<!--input type="checkbox" name="popularity" id="checkbox-34" class="popularity" value="yes"-->
+				<label class="switch">
+					<input type="checkbox" name="popularity" id="checkbox-34" class="popularity" value="yes">
+					<span class="slider round"></span>
+				</label>
+			</fieldset>
+		</div>
 
-		<fieldset id="Popularity">
-			<label for="checkbox-34">Order by popularity</label>
-			<input type="checkbox" name="popularity" id="checkbox-34" class="popularity" value="yes">
-		</fieldset>
+		
 
 		<button id="search_button" name="search" class="btn btn-success" href="#" >Enviar</button>
 	</form>
+</section>
+<footer>
+	Página desarrollada por alumnos de la Universidad de Granada&copy;
+</footer>
 </body>
 </html>
