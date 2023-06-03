@@ -25,8 +25,7 @@
 		<h1>MoodMovies - El recomendador de películas que necesitas</h1>
 	</header>
 	<section>
-	<!--form action="http://34.175.4.212:8080/" class="formsearchmovies" method="post"-->
-	<form action="http://localhost:8080/" class="formsearchmovies" method="post">
+	<form action="http://34.175.204.72:8080/" class="formsearchmovies" method="post">
 	<!-- Selector de moods-->
 		<p>¿Cuál es tu mood hoy?</p>
 		<p>Selecciona el emoji que te represente de las siguientes: </p>
@@ -46,7 +45,7 @@
 	 	<div id="year_selector">
 			<p>¿De qué año quieres que sea tu película?</p>
 			<p>
-				<label for="years">Peliculas entre los años:</label>
+				<label>Peliculas entre los años:</label>
 
 				<input type="text" name="years_desde" id="years_desde" readonly >
 				<input type="text" name="years_hasta" id="years_hasta" readonly>
@@ -59,7 +58,6 @@
 		<p>¿Algún género que te guste de los siguientes?</p>
 
 		<fieldset id="yes_genres_fieldset" class="fieldset1">
-			<!--<legend>Géneros que te gustan:  </legend> -->
 			<label for="checkbox-1" class="selectgenre btn btn-outline-secondary">Acción
 				<input type="checkbox" name="action" id="checkbox-1" class="form-check-input genre_selector" value="yes">
 			</label>
@@ -113,7 +111,6 @@
 		<!-- Selector de generos a quitar-->
 		<p>¿Algún género que no te guste de los siguientes?</p>
 		<fieldset id="no_genres_fieldset" class="fieldset1">
-			<!--<legend>Géneros que NO te gustan:  </legend> -->
 			<label for="checkbox-11" class="selectgenre btn btn-outline-secondary">Acción
 				<input type="checkbox" name="action" id="checkbox-11" class="form-check-input genre_selector" value="no">
 			</label>
@@ -171,7 +168,6 @@
 		<div class="content-popularity">
 			<fieldset id="Popularity">
 				<label for="checkbox-34">Selecciona para ordenar tus peliculas por popularidad</label>
-				<!--input type="checkbox" name="popularity" id="checkbox-34" class="popularity" value="yes"-->
 				<label class="switch">
 					<input type="checkbox" name="popularity" id="checkbox-34" class="popularity" value="yes">
 					<span class="slider round"></span>
@@ -181,7 +177,7 @@
 
 		
 
-		<button id="search_button" name="search" class="btn btn-success" href="#" >Enviar</button>
+		<button id="search_button" name="search" class="btn btn-success" >Enviar</button>
 	</form>
 </section>
 <footer>

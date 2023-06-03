@@ -51,32 +51,12 @@ public class Movie {
         return score_mc;
     }
 
-    public void setScore_mc(String score_mc) {
-        this.score_mc = score_mc;
-    }
-
     public String getScore_rt() {
         return score_rt;
     }
 
-    public void setScore_rt(String score_rt) {
-        this.score_rt = score_rt;
-    }
-
     public String getYear() {
         return Integer.toString(year);
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
     }
 
     public String getId() {
@@ -87,19 +67,8 @@ public class Movie {
         this.id = id;
     }
 
-    public ArrayList<Tag> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(ArrayList<Tag> genres) {
-        this.genres = genres;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

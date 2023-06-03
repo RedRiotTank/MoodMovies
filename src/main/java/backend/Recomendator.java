@@ -24,7 +24,6 @@ public class Recomendator {
 
     private boolean popularity;
 
-
     public Recomendator(String mood, int minYear, int maxYear,  ArrayList<stream> plataforms,ArrayList<Tag> yes_genres,ArrayList<Tag> no_genres,Boolean popularity, MovieLoader mvloader){
         this.popularity = popularity;
         search_by = new ArrayList<>();
@@ -145,43 +144,12 @@ public class Recomendator {
                 result = "878";
                 break;
             default:
-                // Opción por defecto si ninguna de las anteriores coincide
-                // Puedes asignar un valor apropiado o lanzar una excepción, según sea necesario
                 break;
         }
 
 
         return result;
 
-    }
-
-    public int getMinYear() {
-        return minYear;
-    }
-
-    public void setMinYear(int minYear) {
-        this.minYear = minYear;
-    }
-
-    public int getMaxYear() {
-        return maxYear;
-    }
-
-    public void setMaxYear(int maxYear) {
-        this.maxYear = maxYear;
-    }
-
-    public Mood getMood() {
-        return mood;
-    }
-
-    public void setMood(Mood mood) {
-        this.mood = mood;
-    }
-
-    public ArrayList<Movie> getMovies(){
-
-        return null;
     }
 
     public ArrayList<String> getSearch_by() {
@@ -192,19 +160,10 @@ public class Recomendator {
         return discard;
     }
 
-    public void setMovies(ArrayList<Movie> movies){
-
-    }
-
-    public ArrayList<Movie> makeList(MovieLoader mvloader) throws SQLException, UnsupportedEncodingException, URISyntaxException {
+    public ArrayList<Movie> makeList(MovieLoader mvloader){
         int total_movies;
         ArrayList<Movie> recommended_list;
-        //DESCARTAR DESDE
-        //movies_search_by = mvloader.getNumMoviesRecommended(this.search_by);
 
-        //movies_to_discard = mvloader.getNumMoviesRecommended(this.discard);
-        //DESCARTAR HASTA
-        //ESTO DEBE DEVOLVER ENTERO CONSULTA IGUAL QUE FUNCIÓN getRecommendedList
         total_movies = mvloader.getNumDataBaseMovies(this.minYear, this.maxYear,this.search_by, this.discard, this.popularity);
 
         System.out.println("Hay un TOTAL de " + total_movies + " peliculas en la bd");
@@ -213,27 +172,11 @@ public class Recomendator {
         if(total_movies < 20 && total_movies >= 0){
             System.out.println("Buscando peliculas en nuestras fuentes de datos");
             mvloader.discoverMoviesWith(popularity, 1, Integer.toString(this.minYear), Integer.toString(this.maxYear+1), this.getSearch_by(), this.getDiscard());
-            //mvloader.discoverMoviesWith(popularity, 2, Integer.toString(this.minYear), Integer.toString(this.maxYear), this.getSearch_by(), this.getDiscard());
         }
         System.out.println("Se ha procesado la busqueda de peliculas correctamente");
-        // se devuelve la lista de recomendación
         recommended_list = mvloader.getRecommendedList(this.minYear, this.maxYear,this.search_by, this.discard, this.popularity);
 
         return recommended_list;
-    }
-    // combina los dos arrays, descartando los elementos del primero que estén en el segundo
-    private static ArrayList<String> combinarArrayLists(ArrayList<String> arrayList1, ArrayList<String> arrayList2) {
-        HashSet<String> elementosExcluidos = new HashSet<>(arrayList2);
-
-        ArrayList<String> resultado = new ArrayList<>();
-
-        for (String elemento : arrayList1) {
-            if (!elementosExcluidos.contains(elemento)) {
-                resultado.add(elemento);
-            }
-        }
-
-        return resultado;
     }
 
 }

@@ -6,8 +6,6 @@ import Data.MovieLoader;
 import backend.Movie;
 import backend.Recomendator;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -17,12 +15,12 @@ import java.util.ArrayList;
  * @author test auth.
  */
 public class Main {
-    public static void main(String[] args) throws IOException, SQLException, URISyntaxException {
+    public static void main(String[] args) throws IOException{
 
-        System.out.println("Iniciando Sistema de control MoodMovies:");//start
+        System.out.println("Iniciando Sistema de control MoodMovies:");
 
-        DataBase database = null;
-        MovieLoader mvloader = null;
+        DataBase database;
+        MovieLoader mvloader;
 
         while(true){
             HTTPsocket http_request = new HTTPsocket();
@@ -34,7 +32,7 @@ public class Main {
             if(recomendation != null){
                 ArrayList<Movie> movieList = recomendation.makeList(mvloader);
 
-                Boolean found_movies ;
+                boolean found_movies ;
                 if(movieList == null || movieList.isEmpty()){
                     found_movies = false;
                     System.out.println("no found movies");
@@ -42,8 +40,6 @@ public class Main {
                     found_movies = true;
                     http_request.createJsonFile(movieList);
                 }
-
-
                 http_request.httpOUT(found_movies);
                 mvloader.getDb().disconnect();
             }

@@ -14,12 +14,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class HTTPsocket {
-    private final int portNumber = 8080; // Puerto en el que se va a escuchar
     private Socket clientSocket;
     private String[] formData;
 
-    public HTTPsocket() throws IOException {
-
+    public HTTPsocket(){
+        int portNumber = 8080;
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             System.out.println("Waiting for incoming connections...");
 
@@ -47,7 +46,7 @@ public class HTTPsocket {
             while (in.ready()) { // Leer todo el cuerpo de la solicitud
                 requestBody.append((char) in.read());
             }
-            return requestBody.substring(requestBody.indexOf("\r\n\r\n") + 4).toString().split("&");
+            return requestBody.substring(requestBody.indexOf("\r\n\r\n") + 4).split("&");
         }
 
         return null;
@@ -201,18 +200,13 @@ public class HTTPsocket {
                         break;
 
                     case "popularity":
-                        if(value.equals("yes")) popularity = true;
-                        else popularity = false;
-
-
+                        popularity = value.equals("yes");
 
                     default:
 
                         break;
                 }
             }
-
-
             return new Recomendator(mood, min_year, max_year, stream_plataforms, yes_genres, no_genres, popularity, mvloader);
 
         }catch (Exception e){
@@ -224,16 +218,14 @@ public class HTTPsocket {
     }
     public void httpOUT(Boolean found_movies) throws IOException {
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-        out.println("HTTP/1.1 302 Found"); // Cambiamos el código de respuesta a 302
+        out.println("HTTP/1.1 302 Found");
         if(found_movies){
-
-
-            out.println("Location: http://recomendator.moodmovies.net/recomendation/movies.php"); // Establecemos la URL de redirección
+            out.println("Location: http://recomendator.moodmovies.net/recomendation/movies.php");
         } else {
-            out.println("Location: http://recomendator.moodmovies.net/recomendation/noFoundMovies.php"); // Establecemos la URL de redirección
+            out.println("Location: http://recomendator.moodmovies.net/recomendation/noFoundMovies.php");
         }
 
-        out.println(); // Línea en blanco para finalizar las cabeceras
+        out.println();
         out.close();
         clientSocket.close();
     }
@@ -254,10 +246,8 @@ public class HTTPsocket {
             System.out.println("El archivo no existe. Se creará uno");
         }
 
-
         JSONArray movieArray = new JSONArray();
 
-        // Recorre cada película y crea un objeto JSON para cada una
         for (Movie movie : movies) {
             JSONObject movieObj = new JSONObject();
             movieObj.put("id", movie.getId());
@@ -274,7 +264,6 @@ public class HTTPsocket {
             movieArray.put(movieObj);
         }
 
-        // Crea el archivo JSON y guarda los datos
         try (FileWriter fileWriter = new FileWriter("movies.json")) {
             fileWriter.write(movieArray.toString());
             System.out.println("Archivo JSON creado correctamente.");

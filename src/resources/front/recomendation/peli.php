@@ -20,7 +20,6 @@
                 $jsonData = file_get_contents('/home/albertoplazamontesdm/MoodMovies/movies.json');
 
                 $movies = json_decode($jsonData, true);
-                // Buscar la película con el ID deseado
                 $desiredMovie = null;
                 foreach ($movies as $movie) {
                         if ($movie['id'] == $id) {
@@ -29,7 +28,6 @@
 
                         }
                 }
-                // Mostrar los detalles de la película si se encuentra
                 if ($desiredMovie) {
 
                         $name = $desiredMovie['name'];
