@@ -42,6 +42,20 @@ public class Recomendator {
             default:
             case "normal":
                 this.mood = backend.Mood.NORMAL;
+                search_by.add(tagtostring(Tag.ACTION));
+                search_by.add(tagtostring(Tag.ANIMATION));
+                search_by.add(tagtostring(Tag.ADVENTURE));
+                search_by.add(tagtostring(Tag.COMEDY));
+                search_by.add(tagtostring(Tag.CRIME));
+                search_by.add(tagtostring(Tag.DRAMA));
+                search_by.add(tagtostring(Tag.FANTASY));
+                search_by.add(tagtostring(Tag.HORROR));
+                search_by.add(tagtostring(Tag.MYSTERY));
+                search_by.add(tagtostring(Tag.ROMANCE));
+                search_by.add(tagtostring(Tag.THRILLER));
+                search_by.add(tagtostring(Tag.WESTERN));
+                search_by.add(tagtostring(Tag.SCIENCE_FICTION));
+                search_by.add(tagtostring(Tag.HISTORY));
                 break;
             case "bad":
                 this.mood = backend.Mood.BAD;

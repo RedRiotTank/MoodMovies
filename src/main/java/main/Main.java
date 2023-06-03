@@ -30,20 +30,24 @@ public class Main {
             database = new DataBase();
             mvloader = new MovieLoader(database);
             Recomendator recomendation = http_request.loadRecomedationInfo(mvloader);
-            ArrayList<Movie> movieList = recomendation.makeList(mvloader);
 
-            Boolean found_movies ;
-            if(movieList == null || movieList.isEmpty()){
-                found_movies = false;
-                System.out.println("no found movies");
-            } else {
-                found_movies = true;
-                http_request.createJsonFile(movieList);
+            if(recomendation != null){
+                ArrayList<Movie> movieList = recomendation.makeList(mvloader);
+
+                Boolean found_movies ;
+                if(movieList == null || movieList.isEmpty()){
+                    found_movies = false;
+                    System.out.println("no found movies");
+                } else {
+                    found_movies = true;
+                    http_request.createJsonFile(movieList);
+                }
+
+
+                http_request.httpOUT(found_movies);
+                mvloader.getDb().disconnect();
             }
 
-
-            http_request.httpOUT(found_movies);
-            mvloader.getDb().disconnect();
         }
 
     }

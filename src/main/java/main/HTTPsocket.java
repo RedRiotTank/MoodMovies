@@ -54,172 +54,174 @@ public class HTTPsocket {
     }
 
     public Recomendator loadRecomedationInfo( MovieLoader mvloader){
-        String mood = formData[0].substring(formData[0].indexOf("=") + 1);
-        int min_year = Integer.parseInt(formData[1].substring(formData[1].indexOf("=") + 1));
-        int max_year = Integer.parseInt(formData[2].substring(formData[2].indexOf("=") + 1));
-        ArrayList<stream> stream_plataforms = new ArrayList<>();
 
-        ArrayList<Tag> yes_genres = new ArrayList<>();
-        ArrayList<Tag> no_genres = new ArrayList<>();
-        boolean popularity = false;
+        try{
+            String mood = formData[0].substring(formData[0].indexOf("=") + 1);
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            System.out.println(formData.length);
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            int min_year = Integer.parseInt(formData[1].substring(formData[1].indexOf("=") + 1));
+            int max_year = Integer.parseInt(formData[2].substring(formData[2].indexOf("=") + 1));
+            ArrayList<stream> stream_plataforms = new ArrayList<>();
 
-        for(int i=3; i< formData.length; i++){
-            String checkBoxInfo = formData[i].substring(0, formData[i].indexOf("="));
+            ArrayList<Tag> yes_genres = new ArrayList<>();
+            ArrayList<Tag> no_genres = new ArrayList<>();
+            boolean popularity = false;
 
-            String value = formData[i].substring(formData[i].indexOf("=") + 1);
+            for(int i=3; i< formData.length; i++){
+                String checkBoxInfo = formData[i].substring(0, formData[i].indexOf("="));
 
-            switch (checkBoxInfo){
-                case "prime":
-                    stream_plataforms.add(stream.PRIME);
-                    break;
+                String value = formData[i].substring(formData[i].indexOf("=") + 1);
 
-                case "netflix":
-                    stream_plataforms.add(stream.NETFLIX);
-                    break;
+                switch (checkBoxInfo){
+                    case "prime":
+                        stream_plataforms.add(stream.PRIME);
+                        break;
 
-                case "itunes":
-                    stream_plataforms.add(stream.ITUNES);
-                    break;
+                    case "netflix":
+                        stream_plataforms.add(stream.NETFLIX);
+                        break;
 
-                case "hbo":
-                    stream_plataforms.add(stream.HBO);
-                    break;
+                    case "itunes":
+                        stream_plataforms.add(stream.ITUNES);
+                        break;
 
-                case "disney":
-                    stream_plataforms.add(stream.DISNEY);
-                    break;
+                    case "hbo":
+                        stream_plataforms.add(stream.HBO);
+                        break;
 
-                case "youtube":
-                    stream_plataforms.add(stream.YOUTUBE);
-                    break;
+                    case "disney":
+                        stream_plataforms.add(stream.DISNEY);
+                        break;
 
-                case "crunchyroll":
-                    stream_plataforms.add(stream.CRUNCHYROLL);
-                    break;
+                    case "youtube":
+                        stream_plataforms.add(stream.YOUTUBE);
+                        break;
 
-                case "action":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.ACTION);
-                    else
-                        no_genres.add(Tag.ACTION);
-                    break;
+                    case "crunchyroll":
+                        stream_plataforms.add(stream.CRUNCHYROLL);
+                        break;
 
-                case "animation":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.ANIMATION);
-                    else
-                        no_genres.add(Tag.ANIMATION);
-                    break;
+                    case "action":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.ACTION);
+                        else
+                            no_genres.add(Tag.ACTION);
+                        break;
 
-                case "adventures":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.ADVENTURE);
-                    else
-                        no_genres.add(Tag.ADVENTURE);
-                    break;
+                    case "animation":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.ANIMATION);
+                        else
+                            no_genres.add(Tag.ANIMATION);
+                        break;
 
-                case "comedy":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.COMEDY);
-                    else
-                        no_genres.add(Tag.COMEDY);
-                    break;
+                    case "adventures":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.ADVENTURE);
+                        else
+                            no_genres.add(Tag.ADVENTURE);
+                        break;
 
-                case "drama":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.DRAMA);
-                    else
-                        no_genres.add(Tag.DRAMA);
-                    break;
+                    case "comedy":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.COMEDY);
+                        else
+                            no_genres.add(Tag.COMEDY);
+                        break;
 
-                case "fantasy":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.FANTASY);
-                    else
-                        no_genres.add(Tag.FANTASY);
-                    break;
+                    case "drama":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.DRAMA);
+                        else
+                            no_genres.add(Tag.DRAMA);
+                        break;
 
-                case "horror":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.HORROR);
-                    else
-                        no_genres.add(Tag.HORROR);
-                    break;
+                    case "fantasy":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.FANTASY);
+                        else
+                            no_genres.add(Tag.FANTASY);
+                        break;
 
-                case "mistery":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.MYSTERY);
-                    else
-                        no_genres.add(Tag.MYSTERY);
-                    break;
+                    case "horror":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.HORROR);
+                        else
+                            no_genres.add(Tag.HORROR);
+                        break;
 
-                case "thriller":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.THRILLER);
-                    else
-                        no_genres.add(Tag.THRILLER);
-                    break;
+                    case "mistery":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.MYSTERY);
+                        else
+                            no_genres.add(Tag.MYSTERY);
+                        break;
 
-                case "western":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.WESTERN);
-                    else
-                        no_genres.add(Tag.WESTERN);
-                    break;
+                    case "thriller":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.THRILLER);
+                        else
+                            no_genres.add(Tag.THRILLER);
+                        break;
 
-                case "crime":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.CRIME);
-                    else
-                        no_genres.add(Tag.CRIME);
-                    break;
+                    case "western":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.WESTERN);
+                        else
+                            no_genres.add(Tag.WESTERN);
+                        break;
 
-                case "romance":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.ROMANCE);
-                    else
-                        no_genres.add(Tag.ROMANCE);
-                    break;
+                    case "crime":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.CRIME);
+                        else
+                            no_genres.add(Tag.CRIME);
+                        break;
 
-                case "science_fiction":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.SCIENCE_FICTION);
-                    else
-                        no_genres.add(Tag.SCIENCE_FICTION);
-                    break;
+                    case "romance":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.ROMANCE);
+                        else
+                            no_genres.add(Tag.ROMANCE);
+                        break;
 
-                case "history":
-                    if(value.equals("yes"))
-                        yes_genres.add(Tag.HISTORY);
-                    else
-                        no_genres.add(Tag.HISTORY);
-                    break;
+                    case "science_fiction":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.SCIENCE_FICTION);
+                        else
+                            no_genres.add(Tag.SCIENCE_FICTION);
+                        break;
 
-                case "popularity":
-                    if(value.equals("yes")) popularity = true;
-                    else popularity = false;
+                    case "history":
+                        if(value.equals("yes"))
+                            yes_genres.add(Tag.HISTORY);
+                        else
+                            no_genres.add(Tag.HISTORY);
+                        break;
+
+                    case "popularity":
+                        if(value.equals("yes")) popularity = true;
+                        else popularity = false;
 
 
 
-                default:
+                    default:
 
-                    break;
+                        break;
+                }
             }
+
+
+            return new Recomendator(mood, min_year, max_year, stream_plataforms, yes_genres, no_genres, popularity, mvloader);
+
+        }catch (Exception e){
+            System.out.println("SE HA PRODUCIDO UN ERROR SOCKET HHTP, IGNORANDO PETICIÓN");
+            return null;
         }
 
-        return new Recomendator(mood,min_year,max_year, stream_plataforms,yes_genres,no_genres,popularity, mvloader);
+
     }
-    /*
-    public void httpOUT() throws IOException {
-        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-        out.println("HTTP/1.1 200 OK");
-        out.println("Content-Type: text/html");
-        out.println("");
-        out.println("<html><body><h1>Hello, World!</h1></body></html>");
-        out.close();
-        clientSocket.close();
-    }
-     */
     public void httpOUT(Boolean found_movies) throws IOException {
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
         out.println("HTTP/1.1 302 Found"); // Cambiamos el código de respuesta a 302
@@ -237,6 +239,22 @@ public class HTTPsocket {
     }
 
     public void createJsonFile(ArrayList<Movie> movies) {
+
+        String ruta = "/home/albertoplazamontesdm/MoodMovies/movies.json";
+
+        File archivo = new File(ruta);
+
+        if (archivo.exists()) {
+            if (archivo.delete()) {
+                System.out.println("Archivo eliminado exitosamente.");
+            } else {
+                System.out.println("No se pudo eliminar el archivo.");
+            }
+        } else {
+            System.out.println("El archivo no existe. Se creará uno");
+        }
+
+
         JSONArray movieArray = new JSONArray();
 
         // Recorre cada película y crea un objeto JSON para cada una

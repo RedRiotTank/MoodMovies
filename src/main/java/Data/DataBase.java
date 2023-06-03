@@ -154,6 +154,8 @@ public class DataBase extends Connector {
 
             if(popularity_order){
                 sqlBuilder.append("ORDER BY m.popularity DESC");
+            } else {
+                sqlBuilder.append("ORDER BY RAND()");
             }
             sqlBuilder.append(" LIMIT 20");
 
