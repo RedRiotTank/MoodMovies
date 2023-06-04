@@ -33,6 +33,14 @@ h1{
   font-weight: bold;
 }
 
+#logo{
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 2px;
+    left: 3px;
+}
+
 h2{
   margin-top: 3%;
 }
@@ -94,4 +102,22 @@ li{
 
 img.cartelera {
   margin-top: 3%;
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 2%;
+}
+.center-button a {
+  display: inline-block;
+  background-color: rgba(236, 231, 163, 0.8);
+  color: black;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+.center-button a:hover {
+  opacity:0.7;
 }

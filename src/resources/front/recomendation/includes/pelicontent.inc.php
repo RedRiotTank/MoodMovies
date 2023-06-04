@@ -1,5 +1,7 @@
 <section class="pelidisplay">
-
+<div class="center-button">
+      <a href="http://recomendator.moodmovies.net/recomendation/movies.php" target="_self">Volver</a>
+</div>
 <h2 class="titulo"><?php echo "$name"?></h2>
     <a href="a.html">
         <img class="cartelera" src="images/<?php echo $id; ?>.jpg" alt="ERROR" width="265" height="377.5" />
@@ -16,4 +18,7 @@
 
         <p class="paragraph"> <?php echo "$description"?></p>
 
+        <div class="center-button">
+              <a href="http://recomendator.moodmovies.net/recomendation/movies.php" target="_self">Volver</a>
+        </div>
 </section>

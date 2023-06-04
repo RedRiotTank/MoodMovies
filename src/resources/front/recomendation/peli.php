@@ -6,10 +6,14 @@
         <meta charset="utf-8">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/pelicss.css">
+        <link rel="icon" type="image/png" href="../images/favicon.png">
         <title>Movie information</title>
 </head>
 <header>
-        <h1>MoodMovies - El recomendador de películas que necesitas</h1>
+		<a href="http://recomendator.moodmovies.net" target="_self" alt="Nueva búsqueda">
+            <img id="logo" src="../images/favicon.png" alt="Logo MoodMovies">
+        </a>
+		<h1>MoodMovies - El recomendador de películas que necesitas</h1>
 </header>
 
 <body>
